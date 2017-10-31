@@ -1,0 +1,9 @@
+<ul class="list-group">
+    {{#each surveys as |value key|}}
+    <li class="list-group-item">
+        <a href="/ui/survey?profileId=demo-profile-id&surveyId={{value.id}}">
+            {{value.title}}
+        </a>
+    </li>
+    {{/each}}
+</ul>

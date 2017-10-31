@@ -23,15 +23,15 @@ export class BaseRepository {
 
         const Questions = BaseRepository.sequelize.define('questions', {
             linearScaleMaximum: {
-                allowNull: false,
+                allowNull: true,
                 type: Sequelize.NUMERIC,
             },
             linearScaleMinimum: {
-                allowNull: false,
+                allowNull: true,
                 type: Sequelize.NUMERIC,
             },
             text: {
-                allowNull: false,
+                allowNull: true,
                 type: Sequelize.STRING,
             },
             type: {
@@ -41,7 +41,7 @@ export class BaseRepository {
         });
 
         const Options = BaseRepository.sequelize.define('options', {
-            name: {
+            text: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },

@@ -17,6 +17,10 @@ export class SurveyService {
         return this.surveyRepository.list(profileId);
     }
 
+    public async find(profileId: string, surveyId: string): Promise<Survey> {
+        return this.surveyRepository.find(profileId, surveyId);
+    }
+
     public async create(
         profileId: string,
         title: string,
