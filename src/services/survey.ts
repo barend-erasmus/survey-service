@@ -6,6 +6,7 @@ import { ISurveyRepository } from './../repositories/survey';
 
 // Imports models
 import { Survey } from './../entities/survey';
+import { Question } from './../entities/question';
 
 export class SurveyService {
 
@@ -24,11 +25,12 @@ export class SurveyService {
     public async create(
         profileId: string,
         title: string,
+        questions: Question[],
     ): Promise<Survey> {
 
-        const survey = new Survey(null, title, null);
+        let survey = new Survey(null, title, questions);
 
-        await this.surveyRepository.create(profileId, survey);
+        survey = await this.surveyRepository.create(profileId, survey);
 
         return survey;
     }

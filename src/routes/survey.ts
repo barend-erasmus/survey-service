@@ -14,12 +14,13 @@ import { Survey } from './../entities/survey';
 export class SurveyRouter {
 
     public static async create(req: express.Request, res: express.Response) {
-        await SurveyRouter.getSurveyService().create(
-            req.body.profileId,
+        const survey: Survey = await SurveyRouter.getSurveyService().create(
+            req.query.profileId,
             req.body.title,
+            req.body.questions,
         );
 
-        res.json('OK');
+        res.json(survey);
     }
 
     public static async list(req: express.Request, res: express.Response) {

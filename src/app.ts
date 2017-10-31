@@ -56,6 +56,7 @@ app.get('/api/survey/list', SurveyRouter.list);
 app.get('/ui/surveys', UIRouter.surveys);
 app.get('/ui/survey', UIRouter.survey);
 app.post('/ui/survey', UIRouter.surveySubmit);
+app.get('/ui/survey/manage/create', UIRouter.surveyCreate);
 
 app.listen(argv.port || 3000, () => {
     console.log(`listening on port ${argv.port || 3000}`);

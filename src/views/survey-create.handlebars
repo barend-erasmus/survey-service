@@ -1,0 +1,131 @@
+<div class="container">
+    <form onsubmit="return onSubmit()">
+        <div class="form-group">
+            <h4>Survey</h4>
+            <label for="txtTitle">Survey Title</label>
+            <input type="text" class="form-control" id="txtTitle" placeholder="Enter the title of your survey">
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="onClickAddMultipleChoiceQuestion()">Add multiple choice question</button>
+            <button type="button" class="btn btn-primary" onclick="onClickAddCheckboxQuestion()">Add checkbox question</button>
+            <button type="button" class="btn btn-primary" onclick="onClickAddTextQuestion()">Add text question</button>
+            <button type="button" class="btn btn-primary">Add rating question</button>
+        </div>
+        <div class="form-group" id="question-container">
+            <h4>Questions</h4>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script>
+
+    // Question: Multiple Choice
+
+    function onClickAddMultipleChoiceQuestion() {
+        $('#question-container').append(`<div class="panel panel-default"> <div class="panel-heading"> <div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your question"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveMultipleChoiceQuestion(this)">Remove</button> </span> </div></div><div class="panel-body"> <div class="form-group"> <button type="button" class="btn btn-primary" onclick="onClickAddOptionMultipleChoiceQuestion(this)">Add option</button> </div><div class="form-group"> <div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your option"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionMultipleChoiceQuestion(this)">Remove</button> </span> </div></div></div><input type="hidden" name="type" value="multiple-choice"/> </div>`);
+    }
+
+    function onClickRemoveMultipleChoiceQuestion(element) {
+        $(element).parent().parent().parent().parent().remove();
+    }
+
+    function onClickAddOptionMultipleChoiceQuestion(element) {
+        $(element).parent().next().append(`<div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your option"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionMultipleChoiceQuestion(this)">Remove</button> </span> </div>`);
+    }
+
+    function onClickRemoveOptionMultipleChoiceQuestion(element) {
+        $(element).parent().parent().remove();
+    }
+
+    // Question: Checkbox
+
+    function onClickAddCheckboxQuestion() {
+        $('#question-container').append(`<div class="panel panel-default"> <div class="panel-heading"> <div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your question"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveCheckboxQuestion(this)">Remove</button> </span> </div></div><div class="panel-body"> <div class="form-group"> <button type="button" class="btn btn-primary" onclick="onClickAddOptionCheckboxQuestion(this)">Add option</button> </div><div class="form-group"> <div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your option"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionCheckboxQuestion(this)">Remove</button> </span> </div></div></div><input type="hidden" name="type" value="checkbox"/> </div>`);
+    }
+
+    function onClickRemoveCheckboxQuestion(element) {
+        $(element).parent().parent().parent().parent().remove();
+    }
+
+    function onClickAddOptionCheckboxQuestion(element) {
+        $(element).parent().next().append(`<div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your option"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionCheckboxQuestion(this)">Remove</button> </span> </div>`);
+    }
+
+    function onClickRemoveOptionCheckboxQuestion(element) {
+        $(element).parent().parent().remove();
+    }
+
+    // Question: Text
+
+    function onClickAddTextQuestion() {
+        $('#question-container').append(`<div class="panel panel-default"> <div class="panel-heading"> <div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your question"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveTextQuestion(this)">Remove</button> </span> </div></div><div class="panel-body"> </div><input type="hidden" name="type" value="text"/> </div>`);
+    }
+
+    function onClickRemoveTextQuestion(element) {
+        $(element).parent().parent().parent().parent().remove();
+    }
+
+    function onSubmit() {
+
+        var profileId = getQueryVariable('profileId');
+
+        var title = $('input#txtTitle').val();
+
+        var questions = [];
+
+        $('#question-container .panel').each(function (index, element) {
+            var text = $(element).find('.panel-heading input').val();
+
+            var options = [];
+            $(element).find('.panel-body .form-group:eq(1) input').each(function (inputIndex, inputElement) {
+
+                return options.push($(inputElement).val());
+            });
+
+            var type = $(element).find('input[type=hidden]').val();
+
+            questions.push({
+                text: text,
+                type: type,
+                options: options,
+                linearScaleMinimum: null,
+                linearScaleMaximum: null,
+            });
+
+        });
+
+        var survey = {
+            title: title,
+            questions: questions,
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: `/api/survey/create?profileId=${profileId}`,
+            data: JSON.stringify(survey),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                window.location = `/ui/survey?profileId=${profileId}&surveyId=${data.id}`;
+            },
+            failure: function (err) {
+                alert(err);
+            }
+        });
+
+        return false;
+    }
+
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+                return pair[1];
+            }
+        }
+        alert('Query Variable ' + variable + ' not found');
+    }
+</script>
