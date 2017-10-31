@@ -1,6 +1,7 @@
 // Imports
 import * as express from 'express';
 import * as path from 'path';
+import * as request from 'request-promise';
 import * as yargs from 'yargs';
 import { config } from './config';
 
@@ -10,16 +11,65 @@ import { SurveyRepository } from './repositories/sequelize/survey';
 
 // Imports middleware
 import * as bodyParser from 'body-parser';
+import * as exphbs from 'express-handlebars';
+import * as cookieSession from 'cookie-session';
+import * as passport from 'passport';
+import * as OAuth2Strategy from 'passport-oauth2';
 
 // Imports routes
 import { UIRouter } from './routes/ui';
 import { SurveyRouter } from './routes/survey';
-import * as exphbs from 'express-handlebars';
+
 
 const surveyRepository = new SurveyRepository(config.database.host, config.database.username, config.database.password);
 
 const argv = yargs.argv;
 const app = express();
+
+// Configures session
+app.use(cookieSession({
+    keys: ['my-secret'],
+    maxAge: 604800000, // 7 Days
+    name: 'session',
+}));
+
+// Configures passport
+app.use(passport.initialize());
+
+passport.serializeUser((user: any, done: (err: Error, obj: any) => void) => {
+    done(null, user.username);
+});
+
+passport.deserializeUser((id: string, done: (err: Error, obj: any) => void) => {
+    done(null, id);
+});
+
+app.use(passport.session());
+
+passport.use(new OAuth2Strategy({
+    authorizationURL: 'https://ketone.openservices.co.za/auth/authorize',
+    callbackURL: argv.prod ? `https://survey-service.openservices.co.za/ui/callback` : 'http://localhost:3000/ui/callback',
+    clientID: '6iqyZJQQ3GX2JWlT4UEz',
+    clientSecret: 'EHVqWXe5kCQNPspzSh8m',
+    tokenURL: 'https://ketone.openservices.co.za/auth/token',
+}, (accessToken: string, refreshToken: string, profile: any, cb) => {
+    request({
+        headers: {
+            authorization: `Bearer ${accessToken}`,
+        },
+        json: true,
+        uri: 'https://ketone.openservices.co.za/auth/user',
+    }).then((result: any) => {
+
+        if (result.client_id === '6iqyZJQQ3GX2JWlT4UEz') {
+            return cb(null, result);
+        } else {
+            return cb(new Error('Invalid Client Id'), null);
+        }
+    }).catch((err: Error) => {
+        return cb(err, null);
+    });
+}));
 
 // Configures body parser
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,7 +89,7 @@ app.engine('handlebars', exphbs({
         },
         'for': (from: number, to: number, incr: number, block: any) => {
             var accum = '';
-            for(var i = from; i < to + 1; i += incr)
+            for (var i = from; i < to + 1; i += incr)
                 accum += block.fn(i);
             return accum;
         },
@@ -50,13 +100,33 @@ app.engine('handlebars', exphbs({
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 
-app.post('/api/survey/create', SurveyRouter.create);
-app.get('/api/survey/list', SurveyRouter.list);
+app.get('/ui/login', passport.authenticate('oauth2'));
 
-app.get('/ui/surveys', UIRouter.surveys);
-app.get('/ui/survey', UIRouter.survey);
-app.post('/ui/survey', UIRouter.surveySubmit);
-app.get('/ui/survey/manage/create', UIRouter.surveyCreate);
+app.get('/ui/callback', passport.authenticate('oauth2', { failureRedirect: '/ui/login' }),
+    (req: express.Request, res: express.Response) => {
+        res.redirect(decodeURIComponent(req.query.state));
+    });
+
+function requireUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+    if (!req.user) {
+        const options: any = {
+            state: encodeURIComponent(req.url),
+        };
+
+        passport.authenticate('oauth2', options)(req, res, next);
+        return;
+    }
+
+    next();
+}
+
+app.post('/api/survey/create', requireUser, SurveyRouter.create);
+app.get('/api/survey/list', requireUser, SurveyRouter.list);
+
+app.get('/ui/surveys', requireUser, UIRouter.surveys);
+app.get('/ui/survey', requireUser, UIRouter.survey);
+app.post('/ui/survey', requireUser, UIRouter.surveySubmit);
+app.get('/ui/survey/manage/create', requireUser, UIRouter.surveyCreate);
 
 app.listen(argv.port || 3000, () => {
     console.log(`listening on port ${argv.port || 3000}`);
