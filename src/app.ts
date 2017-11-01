@@ -124,11 +124,15 @@ function requireUser(req: express.Request, res: express.Response, next: express.
 app.post('/api/survey/create', requireUser, SurveyRouter.create);
 app.put('/api/survey/update', requireUser, SurveyRouter.update);
 app.get('/api/survey/list', requireUser, SurveyRouter.list);
+app.get('/api/survey/find', requireUser, SurveyRouter.find);
+app.get('/api/survey/answer/list', requireUser, SurveyRouter.listAnswers);
 
 app.get('/ui/dashboard', requireUser, UIRouter.dashboard);
 
 app.get('/ui/survey', requireUser, UIRouter.survey);
 app.post('/ui/survey', requireUser, UIRouter.surveySubmit);
+
+app.get('/ui/survey/results', requireUser, UIRouter.results);
 
 app.get('/ui/survey/manage', requireUser, UIRouter.surveys);
 app.get('/ui/survey/manage/create', requireUser, UIRouter.surveyCreate);
@@ -140,6 +144,7 @@ app.listen(argv.port || 3000, () => {
 
 // import { Survey } from './entities/survey';
 // import { Question } from './entities/question';
+// import { Answer } from './entities/answer';
 
 // surveyRepository.sync().then(() => {
 //     return surveyRepository.create(new Survey(
@@ -211,6 +216,25 @@ app.listen(argv.port || 3000, () => {
 //             // ),
 //         ],
 //     ));
+// }).then((survey: Survey) => {
+
+//     var promises = []
+
+//     for (let i = 0; i < 30; i++) {
+//         for (const question of survey.questions) {
+//             if (question.type === 'multiple-choice' || question.type === 'checkbox') {
+//                 promises.push(surveyRepository.saveAnswer(new Answer(question.id, 'demo-profile-id', [
+//                     question.options[Math.floor(Math.random() * question.options.length)]
+//                 ], null)));
+//             } else {
+//                 promises.push(surveyRepository.saveAnswer(new Answer(question.id, 'demo-profile-id', [
+//                     'Hello World'
+//                 ], null)));
+//             }
+//         }
+//     }
+
+//     return Promise.all(promises);
 // }).then((result) => {
-//     console.log(JSON.stringify(result));
+//     console.log(result);
 // });

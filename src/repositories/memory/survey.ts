@@ -32,4 +32,8 @@ export class SurveyRepository implements ISurveyRepository {
     public async saveAnswer(answer: Answer): Promise<boolean> {
             return true;
     }
+
+    public async listAnswers(questionId: number): Promise<Answer[]> {
+        return [];
+    }
 }

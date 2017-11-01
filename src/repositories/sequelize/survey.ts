@@ -204,4 +204,20 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             });
         return true;
     }
+
+    public async listAnswers(questionId: number): Promise<Answer[]> {
+
+        const answers: any[] = await BaseRepository.models.Answers.findAll({
+            include: [
+                {
+                    model: BaseRepository.models.AnswerTextValues,
+                },
+            ],
+            where: {
+                questionId,
+            },
+        });
+
+        return answers.map((x) => new Answer(questionId, x.profileId, x.answerTextValues.map((y) => y.text), x.numericValue));
+    }
 }

@@ -66,4 +66,25 @@ export class SurveyService {
 
         return this.surveyRepository.saveAnswer(answer);
     }
+
+    public async listAnswers(
+        profileId: string,
+        surveyId: number,
+        questionId: number,
+    ): Promise<Answer[]> {
+
+        const survey: Survey = await this.surveyRepository.find(surveyId);
+        
+        if (survey.profileId !== profileId) {
+            throw new Error('');
+        }
+
+        const question: Question = survey.questions.find((x) => x.id == questionId);
+
+        if (!question) {
+            throw new Error('');
+        }
+
+        return this.surveyRepository.listAnswers(questionId);
+    }
 }

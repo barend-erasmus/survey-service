@@ -10,4 +10,5 @@ export interface ISurveyRepository {
     list(profileId: string): Promise<Survey[]>;
 
     saveAnswer(answer: Answer): Promise<boolean>;
+    listAnswers(questionId: number): Promise<Answer[]>;
 }

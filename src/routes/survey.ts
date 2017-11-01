@@ -39,6 +39,21 @@ export class SurveyRouter {
         res.json(surveys);
     }
 
+    public static async find(req: express.Request, res: express.Response) {
+        const survey = await SurveyRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
+        res.json(survey);
+    }
+
+    public static async listAnswers(req: express.Request, res: express.Response) {
+        const answers = await SurveyRouter.getSurveyService().listAnswers('demo-profile-id', parseInt(req.query.surveyId, undefined), parseInt(req.query.questionId, undefined));
+
+        res.json({
+            answers,
+            questionId: parseInt(req.query.questionId, undefined),
+            surveyId: parseInt(req.query.surveyId, undefined),
+        });
+    }
+
     protected static getSurveyService(): SurveyService {
 
         const surveyRepository: SurveyRepository = new SurveyRepository(config.database.host, config.database.username, config.database.password);

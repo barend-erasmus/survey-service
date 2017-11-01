@@ -1,0 +1,189 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Dashboard</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/ui/dashboard">Home</a>
+            </li>
+            <li class="active">
+                <strong>Results</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Question Results</h5>
+                    <div class="ibox-tools">
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script>
+
+    var survey;
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: 'GET',
+            url: `/api/survey/find?surveyId=1`,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (responseSurvey) {
+                survey = responseSurvey;
+
+                for (var question of survey.questions) {
+                    $('.ibox-content').append(`<div id="chart-${question.id}"></div>`);
+
+                    if (question.type === 'multiple-choice') {
+                        $.ajax({
+                            type: 'GET',
+                            url: `http://localhost:3000/api/survey/answer/list?surveyId=${survey.id}&questionId=${question.id}`,
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            success: function (response) {
+                                initializeMutlipleChoiceChart(response);
+                            },
+                            failure: function (err) {
+                                alert(err);
+                            }
+                        });
+                    } else if (question.type === 'checkbox') {
+                        $.ajax({
+                            type: 'GET',
+                            url: `http://localhost:3000/api/survey/answer/list?surveyId=${survey.id}&questionId=${question.id}`,
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            success: function (response) {
+                                initializeCheckboxChart(response);
+                            },
+                            failure: function (err) {
+                                alert(err);
+                            }
+                        });
+                    }
+                }
+            },
+            failure: function (err) {
+                alert(err);
+            }
+        });
+
+
+    });
+
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+
+    function initializeMutlipleChoiceChart(response) {
+        var labels = [].concat.apply([], response.answers.map((x) => x.textValues));
+        labels = labels.filter(onlyUnique);
+
+        var data = [];
+
+        for (var label of labels) {
+            data.push({
+                name: label,
+                y: response.answers.filter((x) => x.textValues.indexOf(label)).length
+            });
+        }
+
+        var json = {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: survey.questions.find((x) => x.id === response.questionId).text
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: '# of respondents',
+                colorByPoint: true,
+                data: data,
+            }]
+        };
+
+        $(`#chart-${response.questionId}`).highcharts(json);
+    }
+
+    function initializeCheckboxChart(response) {
+        var labels = [].concat.apply([], response.answers.map((x) => x.textValues));
+        labels = labels.filter(onlyUnique);
+
+        var data = [];
+
+        for (var label of labels) {
+            data.push({
+                name: label,
+                y: response.answers.filter((x) => x.textValues.indexOf(label)).length
+            });
+        }
+
+        var json = {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: survey.questions.find((x) => x.id === response.questionId).text
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: '# of respondents',
+                colorByPoint: true,
+                data: data,
+            }]
+        };
+
+        $(`#chart-${response.questionId}`).highcharts(json);
+    }
+</script>

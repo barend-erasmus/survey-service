@@ -35,6 +35,10 @@ export class UIRouter {
         });
     }
 
+    public static async results(req: express.Request, res: express.Response) {
+        res.render('results');
+    }
+
     public static async surveySubmit(req: express.Request, res: express.Response) {
 
         const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', parseInt(req.body.id, undefined));
