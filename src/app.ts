@@ -123,6 +123,7 @@ function requireUser(req: express.Request, res: express.Response, next: express.
 app.post('/api/survey/create', requireUser, SurveyRouter.create);
 app.get('/api/survey/list', requireUser, SurveyRouter.list);
 
+app.get('/ui/dashboard', requireUser, UIRouter.dashboard);
 
 app.get('/ui/survey', requireUser, UIRouter.survey);
 app.post('/ui/survey', requireUser, UIRouter.surveySubmit);

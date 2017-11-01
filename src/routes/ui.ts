@@ -13,6 +13,10 @@ import { Survey } from './../entities/survey';
 
 export class UIRouter {
 
+    public static async dashboard(req: express.Request, res: express.Response) {
+        res.render('dashboard');
+    }
+
     public static async surveys(req: express.Request, res: express.Response) {
         const surveys: Survey[] = await UIRouter.getSurveyService().list('demo-profile-id');
 
