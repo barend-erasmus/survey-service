@@ -3,6 +3,7 @@ import { ISurveyRepository } from './../survey';
 
 // Imports models
 import { Survey } from './../../entities/survey';
+import { Answer } from './../../entities/answer';
 
 export class SurveyRepository implements ISurveyRepository {
 
@@ -26,5 +27,9 @@ export class SurveyRepository implements ISurveyRepository {
 
     public async list(profileId: string): Promise<Survey[]> {
         return this.surveys.filter((x) => x.profileId === profileId);
+    }
+
+    public async saveAnswer(answer: Answer): Promise<boolean> {
+            return true;
     }
 }

@@ -5,6 +5,7 @@ import { BaseRepository } from './base';
 // Imports models
 import { Survey } from './../../entities/survey';
 import { Question } from './../../entities/question';
+import { Answer } from './../../entities/answer';
 
 export class SurveyRepository extends BaseRepository implements ISurveyRepository {
 
@@ -106,7 +107,8 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     return {
                         text: y,
                     };
-                })
+                }),
+                surveyId: survey.id,
             }, {
                     include: [
                         { model: BaseRepository.models.Options }
@@ -182,5 +184,26 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 parseInt(y.linearScaleMaximum),
             ))
         ));
+    }
+
+    public async saveAnswer(answer: Answer): Promise<boolean> {
+
+        const result: any = await BaseRepository.models.Answers.create({
+            profileId: answer.profileId,
+            numericValue: answer.numericValue,
+            questionId: answer.questionId,
+            answerTextValues: answer.textValues.map((x) => {
+                return {
+                    text: x,
+                };
+            })
+        }, {
+                include: [
+                    {
+                        model: BaseRepository.models.AnswerTextValues,
+                    },
+                ],
+            });
+        return true;
     }
 }

@@ -24,8 +24,9 @@ export class SurveyRouter {
     }
 
     public static async update(req: express.Request, res: express.Response) {
-        const survey: Survey = await SurveyRouter.getSurveyService().create(
+        const survey: Survey = await SurveyRouter.getSurveyService().update(
             'demo-profile-id',
+            req.body.id,
             req.body.title,
             req.body.questions,
         );

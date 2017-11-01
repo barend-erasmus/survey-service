@@ -121,7 +121,7 @@ function requireUser(req: express.Request, res: express.Response, next: express.
 }
 
 app.post('/api/survey/create', requireUser, SurveyRouter.create);
-app.post('/api/survey/update', requireUser, SurveyRouter.update);
+app.put('/api/survey/update', requireUser, SurveyRouter.update);
 app.get('/api/survey/list', requireUser, SurveyRouter.list);
 
 app.get('/ui/dashboard', requireUser, UIRouter.dashboard);
@@ -200,14 +200,14 @@ app.listen(argv.port || 3000, () => {
 //                 null,
 //                 null,
 //             ),
-//             new Question(
-//                 null,
-//                 'How likely is it that you would recommend our brand to a friend or colleague?',
-//                 'rating',
-//                 [],
-//                 0,
-//                 10,
-//             ),
+//             // new Question(
+//             //     null,
+//             //     'How likely is it that you would recommend our brand to a friend or colleague?',
+//             //     'rating',
+//             //     [],
+//             //     0,
+//             //     10,
+//             // ),
 //         ],
 //     ));
 // }).then((result) => {

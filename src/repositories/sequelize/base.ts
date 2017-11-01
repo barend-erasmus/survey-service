@@ -4,6 +4,8 @@ import * as Sequelize from 'sequelize';
 export class BaseRepository {
     protected static sequelize: Sequelize.Sequelize = null;
     protected static models: {
+        Answers: Sequelize.Model<{}, {}>,
+        AnswerTextValues: Sequelize.Model<{}, {}>,
         Surveys: Sequelize.Model<{}, {}>,
         Questions: Sequelize.Model<{}, {}>,
         Options: Sequelize.Model<{}, {}>,
@@ -47,13 +49,41 @@ export class BaseRepository {
             },
         });
 
+        const Answers = BaseRepository.sequelize.define('answers', {
+            profileId: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+            numericValue: {
+                allowNull: true,
+                type: Sequelize.NUMERIC,
+            },
+        });
+
+        const AnswerTextValues = BaseRepository.sequelize.define('answerTextValues', {
+            text: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+        });
+
+
         Surveys.hasMany(Questions, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
         Questions.belongsTo(Surveys, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
         Questions.hasMany(Options, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
         Options.belongsTo(Questions, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
+        Questions.hasMany(Answers, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        Answers.belongsTo(Questions, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+
+        Answers.hasMany(AnswerTextValues, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        AnswerTextValues.belongsTo(Answers, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        
+
         this.models = {
+            Answers,
+            AnswerTextValues,
             Options,
             Questions,
             Surveys,

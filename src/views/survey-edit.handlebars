@@ -107,7 +107,7 @@
                                                 {{/each}}
                                             </div>
                                         </div>
-                                        <input type="hidden" name="question-type" value="multiple-choice" />
+                                        <input type="hidden" name="question-type" value="checkbox" />
                                         <input type="hidden" name="question-id" value="{{question.id}}" />
                                     </div>
                                 {{/ifCond}}
@@ -213,7 +213,7 @@
                 var id = $(element).find('input[type=hidden][name=question-id]').val();
 
                 questions.push({
-                    id: id,
+                    id: parseInt(id),
                     text: text,
                     type: type,
                     options: options,
@@ -224,13 +224,13 @@
             });
 
             var survey = {
-                surveyId: surveyId,
+                id: parseInt(surveyId),
                 title: title,
                 questions: questions,
             };
 
             $.ajax({
-                type: 'POST',
+                type: 'PUT',
                 url: `/api/survey/update`,
                 data: JSON.stringify(survey),
                 contentType: 'application/json; charset=utf-8',

@@ -7,6 +7,7 @@ import { ISurveyRepository } from './../repositories/survey';
 // Imports models
 import { Survey } from './../entities/survey';
 import { Question } from './../entities/question';
+import { Answer } from './../entities/answer';
 
 export class SurveyService {
 
@@ -53,5 +54,16 @@ export class SurveyService {
         survey = await this.surveyRepository.update(survey);
 
         return survey;
+    }
+
+    public async saveAnswer(
+        questionId: number,
+        profileId: string,
+        textValues: string[],
+        numericValue: number,
+    ): Promise<boolean> {
+        const answer: Answer = new Answer(questionId, profileId, textValues, numericValue);
+
+        return this.surveyRepository.saveAnswer(answer);
     }
 }
