@@ -1,50 +1,63 @@
-<div class="container">
-    <h2>{{survey.title}}</h2>
-    <form method="post">
-        {{#each survey.questions as |question key|}}
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{question.text}}</h3>
-                </div>
-                <div class="panel-body">
-                    <ul class="list-group">
-                        {{#ifCond question.type 'multiple-choice'}}
-                            {{#each question.options as |option key|}}
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="question-{{question.id}}" value="{{option}}" />{{option}}
-                                    </label>
-                                </div>
-                            {{/each}}
-                        {{/ifCond}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{survey.title}} | Survey Service</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>{{survey.title}}</h2>
+        <form method="post">
+            {{#each survey.questions as |question key|}}
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{question.text}}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            {{#ifCond question.type 'multiple-choice'}}
+                                {{#each question.options as |option key|}}
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="question-{{question.id}}" value="{{option}}" />{{option}}
+                                        </label>
+                                    </div>
+                                {{/each}}
+                            {{/ifCond}}
 
-                        {{#ifCond question.type 'checkboxes'}}
-                            {{#each question.options as |option key|}}
-                                <div class="checkbox">
-                                    <label><input name="question-{{question.id}}" type="checkbox" value="{{option}}"/>{{option}}</label>
-                                </div>
-                            {{/each}}
-                        {{/ifCond}}
+                            {{#ifCond question.type 'checkbox'}}
+                                {{#each question.options as |option key|}}
+                                    <div class="checkbox">
+                                        <label><input name="question-{{question.id}}" type="checkbox" value="{{option}}"/>{{option}}</label>
+                                    </div>
+                                {{/each}}
+                            {{/ifCond}}
 
-                        {{#ifCond question.type 'text'}}
-                            <textarea class="form-control" rows="5" name="question-{{question.id}}"></textarea>
-                        {{/ifCond}}
+                            {{#ifCond question.type 'text'}}
+                                <textarea class="form-control" rows="5" name="question-{{question.id}}"></textarea>
+                            {{/ifCond}}
 
-                        {{#ifCond question.type 'rating'}}
-                            <select class="form-control" name="question-{{question.id}}">
-                                {{#for question.linearScaleMinimum question.linearScaleMaximum 1}}
-                                    <option>{{this}}</option>
-                                {{/for}}
-                            </select>
-                        {{/ifCond}}
-                    </ul>
+                            {{#ifCond question.type 'rating'}}
+                                <select class="form-control" name="question-{{question.id}}">
+                                    {{#for question.linearScaleMinimum question.linearScaleMaximum 1}}
+                                        <option>{{this}}</option>
+                                    {{/for}}
+                                </select>
+                            {{/ifCond}}
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        {{/each}}
-        <div class="row">
-            <button type="submit" class="btn btn-primary pull-right">Submit</button>
-        </div>
-    </form>
-</div>
+            {{/each}}
+            <div class="row">
+                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

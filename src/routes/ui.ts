@@ -26,16 +26,15 @@ export class UIRouter {
         
         res.render('survey', {
             survey,
+            layout: false,
         });
     }
 
     public static async surveySubmit(req: express.Request, res: express.Response) {
         console.log(req.body);
 
-        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
-        
-        res.render('survey', {
-            survey,
+        res.render('thank-you', {
+            layout: false,
         });
     }
 
