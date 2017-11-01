@@ -31,10 +31,10 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <form onsubmit="return onSubmit()">
+                    <form onsubmit="return onSubmit()" id="survey-edit">
                         <div class="form-group">
                             <label for="txtTitle">Title</label>
-                            <input type="text" class="form-control" id="txtTitle" placeholder="Enter the title of your survey" value="{{survey.title}}">
+                            <input type="text" class="form-control" id="txtTitle" placeholder="Enter the title of your survey" value="{{survey.title}}" data-parsley-required="">
                         </div>
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" onclick="onClickAddMultipleChoiceQuestion()">Add multiple choice question</button>
@@ -48,11 +48,13 @@
                                 {{#ifCond question.type 'multiple-choice'}}
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Enter the text of your question" value="{{question.text}}">
-                                                <span class="input-group-btn">
+                                            <div class="form-group row">
+                                                <div class="col-lg-8">
+                                                    <input type="text" class="form-control" placeholder="Enter the text of your question" value="{{question.text}}" data-parsley-required="">
+                                                </div>
+                                                <div class="col-lg-2">
                                                     <button class="btn btn-warning" type="button" onclick="onClickRemoveMultipleChoiceQuestion(this)">Remove</button>
-                                                </span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="panel-body">
@@ -61,27 +63,31 @@
                                             </div>
                                             <div class="form-group">
                                                 {{#each question.options as |option key|}}
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" placeholder="Enter the text of your option" value="{{option}}">
-                                                        <span class="input-group-btn">
+                                                    <div class="row">
+                                                        <div class="col-lg-8">
+                                                            <input type="text" class="form-control parsley-error" placeholder="Enter the text of your option" value="{{option}}" data-parsley-required="">
+                                                        </div>
+                                                        <div class="col-lg-2">
                                                             <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionMultipleChoiceQuestion(this)">Remove</button>
-                                                        </span>
+                                                        </div>
                                                     </div>
                                                 {{/each}}
                                             </div>
                                         </div>
-                                        <input type="hidden" name="type" value="multiple-choice" />
-                                        <input type="hidden" name="id" value="{{question.id}}" />
+                                        <input type="hidden" name="question-type" value="multiple-choice" />
+                                        <input type="hidden" name="question-id" value="{{question.id}}" />
                                     </div>
                                 {{/ifCond}}
                                 {{#ifCond question.type 'checkbox'}}
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Enter the text of your question" value="{{question.text}}">
-                                                <span class="input-group-btn">
+                                            <div class="form-group row">
+                                                <div class="col-lg-8">
+                                                    <input type="text" class="form-control" placeholder="Enter the text of your question" value="{{question.text}}" data-parsley-required="">
+                                                </div>
+                                                <div class="col-lg-2">
                                                     <button class="btn btn-warning" type="button" onclick="onClickRemoveMultipleChoiceQuestion(this)">Remove</button>
-                                                </span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="panel-body">
@@ -90,38 +96,43 @@
                                             </div>
                                             <div class="form-group">
                                                 {{#each question.options as |option key|}}
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" placeholder="Enter the text of your option" value="{{option.text}}">
-                                                        <span class="input-group-btn">
+                                                    <div class="row">
+                                                        <div class="col-lg-8">
+                                                            <input type="text" class="form-control parsley-error" placeholder="Enter the text of your option" value="{{option}}" data-parsley-required="">
+                                                        </div>
+                                                        <div class="col-lg-2">
                                                             <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionMultipleChoiceQuestion(this)">Remove</button>
-                                                        </span>
+                                                        </div>
                                                     </div>
                                                 {{/each}}
                                             </div>
                                         </div>
-                                        <input type="hidden" name="type" value="multiple-choice" />
-                                        <input type="hidden" name="id" value="{{question.id}}" />
+                                        <input type="hidden" name="question-type" value="multiple-choice" />
+                                        <input type="hidden" name="question-id" value="{{question.id}}" />
                                     </div>
                                 {{/ifCond}}
                                 {{#ifCond question.type 'text'}}
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Enter the text of your question" value="{{question.text}}">
-                                                <span class="input-group-btn">
+                                            <div class="form-group row">
+                                                <div class="col-lg-8">
+                                                    <input type="text" class="form-control" placeholder="Enter the text of your question" value="{{question.text}}" data-parsley-required="">
+                                                </div>
+                                                <div class="col-lg-2">
                                                     <button class="btn btn-warning" type="button" onclick="onClickRemoveMultipleChoiceQuestion(this)">Remove</button>
-                                                </span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="panel-body">
                                         </div>
-                                        <input type="hidden" name="type" value="text" />
-                                        <input type="hidden" name="id" value="{{question.id}}" />
+                                        <input type="hidden" name="question-type" value="text" />
+                                        <input type="hidden" name="question-id" value="{{question.id}}" />
                                     </div>
                                 {{/ifCond}}
                             {{/each}}
                         </div>
-                        <button type="submit" class="btn btn-primary" disabled>Submit</button>
+                        <input type="hidden" name="survey-id" value="{{survey.id}}" />
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>
@@ -130,10 +141,15 @@
 </div>
 <script>
 
+    var formParsley;
+    $(document).ready(function () {
+        formParsley = $('form#survey-edit').parsley();
+    });
+
     // Question: Multiple Choice
 
     function onClickAddMultipleChoiceQuestion() {
-        $('#question-container').append(`<div class="panel panel-default"> <div class="panel-heading"> <div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your question"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveMultipleChoiceQuestion(this)">Remove</button> </span> </div></div><div class="panel-body"> <div class="form-group"> <button type="button" class="btn btn-primary" onclick="onClickAddOptionMultipleChoiceQuestion(this)">Add option</button> </div><div class="form-group"> <div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your option"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionMultipleChoiceQuestion(this)">Remove</button> </span> </div></div></div><input type="hidden" name="type" value="multiple-choice"/> </div>`);
+        $('#question-container').append(`<div class="panel panel-default"> <div class="panel-heading"> <div class="form-group row"> <div class="col-lg-8"> <input type="text" class="form-control" placeholder="Enter the text of your question" data-parsley-required=""> </div><div class="col-lg-2"> <button class="btn btn-warning" type="button" onclick="onClickRemoveMultipleChoiceQuestion(this)">Remove</button> </div></div></div><div class="panel-body"> <div class="form-group"> <button type="button" class="btn btn-primary" onclick="onClickAddOptionMultipleChoiceQuestion(this)">Add option</button> </div><div class="form-group"> <div class="row"> <div class="col-lg-8"> <input type="text" class="form-control" placeholder="Enter the text of your option" data-parsley-required=""> </div><div class="col-lg-2"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionMultipleChoiceQuestion(this)">Remove</button> </div></div></div></div><input type="hidden" name="type" value="multiple-choice"/></div>`);
     }
 
     function onClickRemoveMultipleChoiceQuestion(element) {
@@ -141,7 +157,7 @@
     }
 
     function onClickAddOptionMultipleChoiceQuestion(element) {
-        $(element).parent().next().append(`<div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your option"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionMultipleChoiceQuestion(this)">Remove</button> </span> </div>`);
+        $(element).parent().next().append(`<div class="row"> <div class="col-lg-8"> <input type="text" class="form-control" placeholder="Enter the text of your option" data-parsley-required=""> </div><div class="col-lg-2"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionMultipleChoiceQuestion(this)">Remove</button> </div></div>`);
     }
 
     function onClickRemoveOptionMultipleChoiceQuestion(element) {
@@ -151,7 +167,7 @@
     // Question: Checkbox
 
     function onClickAddCheckboxQuestion() {
-        $('#question-container').append(`<div class="panel panel-default"> <div class="panel-heading"> <div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your question"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveCheckboxQuestion(this)">Remove</button> </span> </div></div><div class="panel-body"> <div class="form-group"> <button type="button" class="btn btn-primary" onclick="onClickAddOptionCheckboxQuestion(this)">Add option</button> </div><div class="form-group"> <div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your option"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionCheckboxQuestion(this)">Remove</button> </span> </div></div></div><input type="hidden" name="type" value="checkbox"/> </div>`);
+        $('#question-container').append(`<div class="panel panel-default"> <div class="panel-heading"> <div class="form-group row"> <div class="col-lg-8"> <input type="text" class="form-control" placeholder="Enter the text of your question" data-parsley-required=""> </div><div class="col-lg-2"> <button class="btn btn-warning" type="button" onclick="onClickRemoveCheckboxQuestion(this)">Remove</button> </div></div></div><div class="panel-body"> <div class="form-group"> <button type="button" class="btn btn-primary" onclick="onClickAddOptionCheckboxQuestion(this)">Add option</button> </div><div class="form-group"> <div class="row"> <div class="col-lg-8"> <input type="text" class="form-control" placeholder="Enter the text of your option" data-parsley-required=""> </div><div class="col-lg-2"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionCheckboxQuestion(this)">Remove</button> </div></div></div></div><input type="hidden" name="type" value="checkbox"/></div>`);
     }
 
     function onClickRemoveCheckboxQuestion(element) {
@@ -159,7 +175,7 @@
     }
 
     function onClickAddOptionCheckboxQuestion(element) {
-        $(element).parent().next().append(`<div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your option"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionCheckboxQuestion(this)">Remove</button> </span> </div>`);
+        $(element).parent().next().append(`<div class="row"> <div class="col-lg-8"> <input type="text" class="form-control" placeholder="Enter the text of your option" data-parsley-required=""> </div><div class="col-lg-2"> <button class="btn btn-warning" type="button" onclick="onClickRemoveOptionCheckboxQuestion(this)">Remove</button> </div></div>`);
     }
 
     function onClickRemoveOptionCheckboxQuestion(element) {
@@ -169,7 +185,7 @@
     // Question: Text
 
     function onClickAddTextQuestion() {
-        $('#question-container').append(`<div class="panel panel-default"> <div class="panel-heading"> <div class="input-group"> <input type="text" class="form-control" placeholder="Enter the text of your question"> <span class="input-group-btn"> <button class="btn btn-warning" type="button" onclick="onClickRemoveTextQuestion(this)">Remove</button> </span> </div></div><div class="panel-body"> </div><input type="hidden" name="type" value="text"/> </div>`);
+        $('#question-container').append(`<div class="panel panel-default"> <div class="panel-heading"> <div class="form-group row"> <div class="col-lg-8"> <input type="text" class="form-control" placeholder="Enter the text of your question" data-parsley-required=""> </div><div class="col-lg-2"> <button class="btn btn-warning" type="button" onclick="onClickRemoveTextQuestion(this)">Remove</button> </div></div></div><div class="panel-body"> </div><input type="hidden" name="type" value="text"/></div>`);
     }
 
     function onClickRemoveTextQuestion(element) {
@@ -178,51 +194,56 @@
 
     function onSubmit() {
 
-        var title = $('input#txtTitle').val();
+        if (formParsley.validate()) {
+            var title = $('input#txtTitle').val();
+            var surveyId = $('input[name=survey-id]').val();
 
-        var questions = [];
+            var questions = [];
 
-        $('#question-container .panel').each(function (index, element) {
-            var text = $(element).find('.panel-heading input').val();
+            $('#question-container .panel').each(function (index, element) {
+                var text = $(element).find('.panel-heading input').val();
 
-            var options = [];
-            $(element).find('.panel-body .form-group:eq(1) input').each(function (inputIndex, inputElement) {
+                var options = [];
+                $(element).find('.panel-body .form-group:eq(1) input').each(function (inputIndex, inputElement) {
 
-                return options.push($(inputElement).val());
+                    return options.push($(inputElement).val());
+                });
+
+                var type = $(element).find('input[type=hidden][name=question-type]').val();
+                var id = $(element).find('input[type=hidden][name=question-id]').val();
+
+                questions.push({
+                    id: id,
+                    text: text,
+                    type: type,
+                    options: options,
+                    linearScaleMinimum: null,
+                    linearScaleMaximum: null,
+                });
+
             });
 
-            var type = $(element).find('input[type=hidden][name=type]').val();
-            var id = $(element).find('input[type=hidden][name=id]').val();
+            var survey = {
+                surveyId: surveyId,
+                title: title,
+                questions: questions,
+            };
 
-            questions.push({
-                id: id,
-                text: text,
-                type: type,
-                options: options,
-                linearScaleMinimum: null,
-                linearScaleMaximum: null,
+            $.ajax({
+                type: 'POST',
+                url: `/api/survey/update`,
+                data: JSON.stringify(survey),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    window.location = `/ui/survey?surveyId=${data.id}`;
+                },
+                failure: function (err) {
+                    alert(err);
+                }
             });
 
-        });
-
-        var survey = {
-            title: title,
-            questions: questions,
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: `/api/survey/update`,
-            data: JSON.stringify(survey),
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            success: function (data) {
-                window.location = `/ui/survey?surveyId=${data.id}`;
-            },
-            failure: function (err) {
-                alert(err);
-            }
-        });
+        }
 
         return false;
     }

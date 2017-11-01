@@ -16,6 +16,10 @@ export class SurveyRepository implements ISurveyRepository {
         return survey;
     }
 
+    public async update(survey: Survey): Promise<Survey> {
+        return survey;
+    }
+
     public async find(surveyId: number): Promise<Survey> {
         return this.surveys.find((x) => x.id === surveyId);
     }

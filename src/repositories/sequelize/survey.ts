@@ -64,6 +64,62 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
         return survey;
     }
 
+    public async update(survey: Survey): Promise<Survey> {
+
+        const existingSurvey: Survey = await this.find(survey.id);
+
+        for (const question of existingSurvey.questions) {
+            for (const option of question.options) {
+                await BaseRepository.models.Options.destroy({
+                    where: {
+                        questionId: question.id,
+                        text: option,
+                    }
+                });
+            }
+
+            await BaseRepository.models.Questions.destroy({
+                where: {
+                    id: question.id,
+                    surveyId: existingSurvey.id,
+                }
+            });
+        }
+
+        await BaseRepository.models.Surveys.update({
+            title: survey.title,
+        },
+            {
+                where: {
+                    id: survey.id
+                }
+            });
+
+
+        for (const question of survey.questions) {
+            await BaseRepository.models.Questions.create({
+                linearScaleMaximum: question.linearScaleMaximum,
+                linearScaleMinimum: question.linearScaleMinimum,
+                text: question.text,
+                type: question.type,
+                options: question.options.map((y) => {
+                    return {
+                        text: y,
+                    };
+                })
+            }, {
+                    include: [
+                        { model: BaseRepository.models.Options }
+                    ]
+                });
+        }
+
+
+        survey = await this.find(survey.id);
+
+        return survey;
+    }
+
     public async find(surveyId: number): Promise<Survey> {
         const survey: any = await BaseRepository.models.Surveys.find({
             include: [
@@ -92,7 +148,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 x.text,
                 x.type,
                 x.options.map((y) => y.text),
-                parseInt(x.linearScaleMinimum), 
+                parseInt(x.linearScaleMinimum),
                 parseInt(x.linearScaleMaximum),
             ))
         );
@@ -122,7 +178,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 y.text,
                 y.type,
                 y.options.map((z) => z.text),
-                parseInt(y.linearScaleMinimum), 
+                parseInt(y.linearScaleMinimum),
                 parseInt(y.linearScaleMaximum),
             ))
         ));

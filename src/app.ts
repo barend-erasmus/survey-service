@@ -121,6 +121,7 @@ function requireUser(req: express.Request, res: express.Response, next: express.
 }
 
 app.post('/api/survey/create', requireUser, SurveyRouter.create);
+app.post('/api/survey/update', requireUser, SurveyRouter.update);
 app.get('/api/survey/list', requireUser, SurveyRouter.list);
 
 app.get('/ui/dashboard', requireUser, UIRouter.dashboard);
