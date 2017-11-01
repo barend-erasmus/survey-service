@@ -74,12 +74,12 @@ export class SurveyService {
     ): Promise<Answer[]> {
 
         const survey: Survey = await this.surveyRepository.find(surveyId);
-        
+
         if (survey.profileId !== profileId) {
             throw new Error('');
         }
 
-        const question: Question = survey.questions.find((x) => x.id == questionId);
+        const question: Question = survey.questions.find((x) => x.id === questionId);
 
         if (!question) {
             throw new Error('');
