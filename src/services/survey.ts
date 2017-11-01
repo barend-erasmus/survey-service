@@ -5,9 +5,9 @@ import { config } from './../config';
 import { ISurveyRepository } from './../repositories/survey';
 
 // Imports models
-import { Survey } from './../entities/survey';
-import { Question } from './../entities/question';
 import { Answer } from './../entities/answer';
+import { Question } from './../entities/question';
+import { Survey } from './../entities/survey';
 
 export class SurveyService {
 

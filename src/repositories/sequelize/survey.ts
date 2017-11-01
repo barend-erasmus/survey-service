@@ -3,9 +3,9 @@ import { ISurveyRepository } from './../survey';
 import { BaseRepository } from './base';
 
 // Imports models
-import { Survey } from './../../entities/survey';
-import { Question } from './../../entities/question';
 import { Answer } from './../../entities/answer';
+import { Question } from './../../entities/question';
+import { Survey } from './../../entities/survey';
 
 export class SurveyRepository extends BaseRepository implements ISurveyRepository {
 
@@ -17,27 +17,27 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
 
         const result: any = await BaseRepository.models.Surveys.create({
             profileId: survey.profileId,
-            title: survey.title,
             questions: survey.questions.map((x) => {
                 return {
                     linearScaleMaximum: x.linearScaleMaximum,
                     linearScaleMinimum: x.linearScaleMinimum,
-                    text: x.text,
-                    type: x.type,
                     options: x.options.map((y) => {
                         return {
                             text: y,
                         };
-                    })
+                    }),
+                    text: x.text,
+                    type: x.type,
                 };
-            })
+            }),
+            title: survey.title,
         }, {
                 include: [
                     {
-                        model: BaseRepository.models.Questions,
                         include: [
-                            { model: BaseRepository.models.Options }
-                        ]
+                            { model: BaseRepository.models.Options },
+                        ],
+                        model: BaseRepository.models.Questions,
                     },
                 ],
             });
@@ -46,7 +46,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
 
         const questions: any[] = await BaseRepository.models.Questions.findAll({
             include: [
-                { model: BaseRepository.models.Options }
+                { model: BaseRepository.models.Options },
             ],
             where: {
                 surveyId: survey.id,
@@ -75,7 +75,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     where: {
                         questionId: question.id,
                         text: option,
-                    }
+                    },
                 });
             }
 
@@ -83,7 +83,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 where: {
                     id: question.id,
                     surveyId: existingSurvey.id,
-                }
+                },
             });
         }
 
@@ -92,30 +92,28 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
         },
             {
                 where: {
-                    id: survey.id
-                }
+                    id: survey.id,
+                },
             });
-
 
         for (const question of survey.questions) {
             await BaseRepository.models.Questions.create({
                 linearScaleMaximum: question.linearScaleMaximum,
                 linearScaleMinimum: question.linearScaleMinimum,
-                text: question.text,
-                type: question.type,
                 options: question.options.map((y) => {
                     return {
                         text: y,
                     };
                 }),
                 surveyId: survey.id,
+                text: question.text,
+                type: question.type,
             }, {
                     include: [
-                        { model: BaseRepository.models.Options }
-                    ]
+                        { model: BaseRepository.models.Options },
+                    ],
                 });
         }
-
 
         survey = await this.find(survey.id);
 
@@ -127,10 +125,10 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             include: [
                 {
                     include: [
-                        { model: BaseRepository.models.Options }
+                        { model: BaseRepository.models.Options },
                     ],
-                    model: BaseRepository.models.Questions
-                }
+                    model: BaseRepository.models.Questions,
+                },
             ],
             where: {
                 id: surveyId,
@@ -150,9 +148,9 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 x.text,
                 x.type,
                 x.options.map((y) => y.text),
-                parseInt(x.linearScaleMinimum),
-                parseInt(x.linearScaleMaximum),
-            ))
+                parseInt(x.linearScaleMinimum, undefined),
+                parseInt(x.linearScaleMaximum, undefined),
+            )),
         );
     }
 
@@ -161,10 +159,10 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             include: [
                 {
                     include: [
-                        { model: BaseRepository.models.Options }
+                        { model: BaseRepository.models.Options },
                     ],
-                    model: BaseRepository.models.Questions
-                }
+                    model: BaseRepository.models.Questions,
+                },
             ],
             where: {
                 profileId,
@@ -180,23 +178,23 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 y.text,
                 y.type,
                 y.options.map((z) => z.text),
-                parseInt(y.linearScaleMinimum),
-                parseInt(y.linearScaleMaximum),
-            ))
+                parseInt(y.linearScaleMinimum, undefined),
+                parseInt(y.linearScaleMaximum, undefined),
+            )),
         ));
     }
 
     public async saveAnswer(answer: Answer): Promise<boolean> {
 
         const result: any = await BaseRepository.models.Answers.create({
-            profileId: answer.profileId,
-            numericValue: answer.numericValue,
-            questionId: answer.questionId,
             answerTextValues: answer.textValues.map((x) => {
                 return {
                     text: x,
                 };
-            })
+            }),
+            numericValue: answer.numericValue,
+            profileId: answer.profileId,
+            questionId: answer.questionId,
         }, {
                 include: [
                     {

@@ -2,8 +2,8 @@
 import { ISurveyRepository } from './../survey';
 
 // Imports models
-import { Survey } from './../../entities/survey';
 import { Answer } from './../../entities/answer';
+import { Survey } from './../../entities/survey';
 
 export class SurveyRepository implements ISurveyRepository {
 

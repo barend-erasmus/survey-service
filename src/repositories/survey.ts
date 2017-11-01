@@ -1,6 +1,6 @@
 // Imports models
-import { Survey } from './../entities/survey';
 import { Answer } from './../entities/answer';
+import { Survey } from './../entities/survey';
 
 export interface ISurveyRepository {
 

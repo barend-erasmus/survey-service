@@ -11,15 +11,14 @@ import { SurveyRepository } from './repositories/sequelize/survey';
 
 // Imports middleware
 import * as bodyParser from 'body-parser';
-import * as exphbs from 'express-handlebars';
 import * as cookieSession from 'cookie-session';
+import * as exphbs from 'express-handlebars';
 import * as passport from 'passport';
 import * as OAuth2Strategy from 'passport-oauth2';
 
 // Imports routes
-import { UIRouter } from './routes/ui';
 import { SurveyRouter } from './routes/survey';
-
+import { UIRouter } from './routes/ui';
 
 const surveyRepository = new SurveyRepository(config.database.host, config.database.username, config.database.password);
 
@@ -81,18 +80,20 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 app.engine('handlebars', exphbs({
     defaultLayout: 'main',
     helpers: {
-        'ifCond': (v1: any, v2: any, options) => {
+        for: (from: number, to: number, incr: number, block: any) => {
+            let accum = '';
+            for (let i = from; i < to + 1; i += incr) {
+                accum += block.fn(i);
+            }
+            return accum;
+        },
+        ifCond: (v1: any, v2: any, options) => {
             if (v1 === v2) {
                 return options.fn(this);
             }
             return options.inverse(this);
         },
-        'for': (from: number, to: number, incr: number, block: any) => {
-            var accum = '';
-            for (var i = from; i < to + 1; i += incr)
-                accum += block.fn(i);
-            return accum;
-        },
+
     },
     layoutsDir: path.join(__dirname, 'views/layouts'),
 }));

@@ -9,8 +9,8 @@ import { SurveyRepository } from './../repositories/sequelize/survey';
 import { SurveyService } from './../services/survey';
 
 // Imports models
-import { Survey } from './../entities/survey';
 import { Question } from './../entities/question';
+import { Survey } from './../entities/survey';
 
 export class UIRouter {
 
@@ -30,18 +30,18 @@ export class UIRouter {
         const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
 
         res.render('survey', {
-            survey,
             layout: false,
+            survey,
         });
     }
 
     public static async surveySubmit(req: express.Request, res: express.Response) {
-        
-        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', parseInt(req.body.id));
+
+        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', parseInt(req.body.id, undefined));
 
         for (const key of Object.keys(req.body)) {
             if (key !== 'id') {
-                const questionId: number = parseInt(key.split('-')[1]);
+                const questionId: number = parseInt(key.split('-')[1], undefined);
 
                 const question: Question = survey.questions.find((x) => x.id === questionId);
 
@@ -51,15 +51,15 @@ export class UIRouter {
                     await UIRouter.getSurveyService().saveAnswer(questionId, 'demo-profile-id', req.body[key] instanceof Array ? req.body[key] : [req.body[key]], null);
                 } else if (question.type === 'text') {
                     await UIRouter.getSurveyService().saveAnswer(questionId, 'demo-profile-id', [req.body[key]], null);
-                }else {
+                } else {
                     throw new Error('');
                 }
             }
         }
 
         res.render('thank-you', {
-            survey,
             layout: false,
+            survey,
         });
     }
 
@@ -71,7 +71,7 @@ export class UIRouter {
         const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
 
         res.render('survey-edit', {
-            survey
+            survey,
         });
     }
 

@@ -50,13 +50,13 @@ export class BaseRepository {
         });
 
         const Answers = BaseRepository.sequelize.define('answers', {
-            profileId: {
-                allowNull: false,
-                type: Sequelize.STRING,
-            },
             numericValue: {
                 allowNull: true,
                 type: Sequelize.NUMERIC,
+            },
+            profileId: {
+                allowNull: false,
+                type: Sequelize.STRING,
             },
         });
 
@@ -66,7 +66,6 @@ export class BaseRepository {
                 type: Sequelize.STRING,
             },
         });
-
 
         Surveys.hasMany(Questions, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
         Questions.belongsTo(Surveys, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
@@ -79,11 +78,10 @@ export class BaseRepository {
 
         Answers.hasMany(AnswerTextValues, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
         AnswerTextValues.belongsTo(Answers, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-        
 
         this.models = {
-            Answers,
             AnswerTextValues,
+            Answers,
             Options,
             Questions,
             Surveys,
