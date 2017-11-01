@@ -18,8 +18,14 @@ export class SurveyService {
         return this.surveyRepository.list(profileId);
     }
 
-    public async find(profileId: string, surveyId: string): Promise<Survey> {
-        return this.surveyRepository.find(profileId, surveyId);
+    public async find(profileId: string, surveyId: number): Promise<Survey> {
+        const survey: Survey = await this.surveyRepository.find(surveyId);
+
+        if (survey.profileId !== profileId) {
+            throw new Error('');
+        }
+
+        return survey;
     }
 
     public async create(
@@ -28,9 +34,9 @@ export class SurveyService {
         questions: Question[],
     ): Promise<Survey> {
 
-        let survey = new Survey(null, title, questions);
+        let survey = new Survey(null, profileId, title, questions);
 
-        survey = await this.surveyRepository.create(profileId, survey);
+        survey = await this.surveyRepository.create(survey);
 
         return survey;
     }

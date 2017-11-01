@@ -1,9 +1,65 @@
-<ul class="list-group">
-    {{#each surveys as |value key|}}
-    <li class="list-group-item">
-        <a href="/ui/survey?profileId=demo-profile-id&surveyId={{value.id}}">
-            {{value.title}}
-        </a>
-    </li>
-    {{/each}}
-</ul>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Survey - Manage</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/ui/survey/manage">Home</a>
+            </li>
+            <li>
+                <a>Survey</a>
+            </li>
+            <li class="active">
+                <strong>Manage</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Surveys</h5>
+                    <div class="ibox-tools">
+                        <a href="/ui/survey/manage/create" class="btn btn-primary">
+                            New Survey
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th># of Questions</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each surveys as |value key|}}
+                            <tr>
+                                <td>
+                                    <a href="/ui/survey?surveyId={{value.id}}">
+                                        {{value.title}}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{value.questions.length}}
+                                </td>
+                                <td>
+                                    <a href="/ui/survey/manage/edit?surveyId={{value.id}}" class="btn btn-primary">
+                                        Edit
+                                    </a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

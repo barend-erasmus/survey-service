@@ -12,10 +12,10 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
         super(host, username, password);
     }
 
-    public async create(profileId: string, survey: Survey): Promise<Survey> {
+    public async create(survey: Survey): Promise<Survey> {
 
         const result: any = await BaseRepository.models.Surveys.create({
-            profileId,
+            profileId: survey.profileId,
             title: survey.title,
             questions: survey.questions.map((x) => {
                 return {
@@ -64,7 +64,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
         return survey;
     }
 
-    public async find(profileId: string, surveyId: number): Promise<Survey> {
+    public async find(surveyId: number): Promise<Survey> {
         const survey: any = await BaseRepository.models.Surveys.find({
             include: [
                 {
@@ -76,7 +76,6 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             ],
             where: {
                 id: surveyId,
-                profileId,
             },
         });
 
@@ -86,6 +85,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
 
         return new Survey(
             survey.id,
+            survey.profileId,
             survey.title,
             survey.questions.map((x) => new Question(
                 x.id,
@@ -100,6 +100,14 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
 
     public async list(profileId: string): Promise<Survey[]> {
         const surveys: any[] = await BaseRepository.models.Surveys.findAll({
+            include: [
+                {
+                    include: [
+                        { model: BaseRepository.models.Options }
+                    ],
+                    model: BaseRepository.models.Questions
+                }
+            ],
             where: {
                 profileId,
             },
@@ -107,8 +115,16 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
 
         return surveys.map((x) => new Survey(
             x.id,
+            x.profileId,
             x.title,
-            [],
+            x.questions.map((y) => new Question(
+                y.id,
+                y.text,
+                y.type,
+                y.options.map((z) => z.text),
+                parseInt(y.linearScaleMinimum), 
+                parseInt(y.linearScaleMaximum),
+            ))
         ));
     }
 }

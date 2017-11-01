@@ -108,14 +108,14 @@ app.get('/ui/callback', passport.authenticate('oauth2', { failureRedirect: '/ui/
     });
 
 function requireUser(req: express.Request, res: express.Response, next: express.NextFunction) {
-    if (!req.user) {
-        const options: any = {
-            state: encodeURIComponent(req.url),
-        };
+    // if (!req.user) {
+    //     const options: any = {
+    //         state: encodeURIComponent(req.url),
+    //     };
 
-        passport.authenticate('oauth2', options)(req, res, next);
-        return;
-    }
+    //     passport.authenticate('oauth2', options)(req, res, next);
+    //     return;
+    // }
 
     next();
 }
@@ -123,10 +123,13 @@ function requireUser(req: express.Request, res: express.Response, next: express.
 app.post('/api/survey/create', requireUser, SurveyRouter.create);
 app.get('/api/survey/list', requireUser, SurveyRouter.list);
 
-app.get('/ui/surveys', requireUser, UIRouter.surveys);
+
 app.get('/ui/survey', requireUser, UIRouter.survey);
 app.post('/ui/survey', requireUser, UIRouter.surveySubmit);
+
+app.get('/ui/survey/manage', requireUser, UIRouter.surveys);
 app.get('/ui/survey/manage/create', requireUser, UIRouter.surveyCreate);
+app.get('/ui/survey/manage/edit', requireUser, UIRouter.surveyEdit);
 
 app.listen(argv.port || 3000, () => {
     console.log(`listening on port ${argv.port || 3000}`);
@@ -136,8 +139,9 @@ app.listen(argv.port || 3000, () => {
 // import { Question } from './entities/question';
 
 // surveyRepository.sync().then(() => {
-//     return surveyRepository.create('demo-profile-id', new Survey(
+//     return surveyRepository.create(new Survey(
 //         null,
+//         'demo-profile-id',
 //         'Brand Awareness',
 //         [
 //             new Question(
@@ -167,7 +171,7 @@ app.listen(argv.port || 3000, () => {
 //             new Question(
 //                 null,
 //                 'Which of the following brands have you heard of? (Select all that apply)',
-//                 'checkboxes',
+//                 'checkbox',
 //                 [
 //                     'Competitor 1',
 //                     'Competitor 2',

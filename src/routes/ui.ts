@@ -14,7 +14,7 @@ import { Survey } from './../entities/survey';
 export class UIRouter {
 
     public static async surveys(req: express.Request, res: express.Response) {
-        const surveys: Survey[] = await UIRouter.getSurveyService().list(req.query.profileId);
+        const surveys: Survey[] = await UIRouter.getSurveyService().list('demo-profile-id');
 
         res.render('surveys', {
             surveys,
@@ -22,7 +22,7 @@ export class UIRouter {
     }
 
     public static async survey(req: express.Request, res: express.Response) {
-        const survey: Survey = await UIRouter.getSurveyService().find(req.query.profileId, req.query.surveyId);
+        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
         
         res.render('survey', {
             survey,
@@ -32,7 +32,7 @@ export class UIRouter {
     public static async surveySubmit(req: express.Request, res: express.Response) {
         console.log(req.body);
 
-        const survey: Survey = await UIRouter.getSurveyService().find(req.query.profileId, req.query.surveyId);
+        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
         
         res.render('survey', {
             survey,
@@ -41,6 +41,14 @@ export class UIRouter {
 
     public static async surveyCreate(req: express.Request, res: express.Response) {
         res.render('survey-create', {});
+    }
+
+    public static async surveyEdit(req: express.Request, res: express.Response) {
+        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
+
+        res.render('survey-edit', {
+            survey
+        });
     }
 
     protected static getSurveyService(): SurveyService {

@@ -15,7 +15,7 @@ export class SurveyRouter {
 
     public static async create(req: express.Request, res: express.Response) {
         const survey: Survey = await SurveyRouter.getSurveyService().create(
-            req.query.profileId,
+            'demo-profile-id',
             req.body.title,
             req.body.questions,
         );
@@ -24,7 +24,7 @@ export class SurveyRouter {
     }
 
     public static async list(req: express.Request, res: express.Response) {
-        const surveys = await SurveyRouter.getSurveyService().list(req.query.profileId);
+        const surveys = await SurveyRouter.getSurveyService().list('demo-profile-id');
         res.json(surveys);
     }
 
