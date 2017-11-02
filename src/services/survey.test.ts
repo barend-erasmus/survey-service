@@ -8,8 +8,8 @@ import { SurveyRepository } from './../repositories/memory/survey';
 import { SurveyService } from './survey';
 
 // Imports models
-import { Survey } from './../entities/survey';
 import { Question } from './../entities/question';
+import { Survey } from './../entities/survey';
 
 describe('SurveyService', () => {
     describe('create', () => {

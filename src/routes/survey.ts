@@ -29,16 +29,16 @@ export class SurveyRouter {
      *
      * @apiSuccessExample {json} Success-Response:
      *      HTTP/1.1 200 OK
-     *      {  
+     *      {
      *      "id":3,
      *      "profileId":"demo-profile-id",
      *      "title":"Test Survey",
-     *      "questions":[  
-     *          {  
+     *      "questions":[
+     *          {
      *              "id":16,
      *              "text":"Are you employed or unemployed?",
      *              "type":"multiple-choice",
-     *              "options":[  
+     *              "options":[
      *                  "Employed",
      *                  "Unemployed"
      *              ],
@@ -59,7 +59,6 @@ export class SurveyRouter {
         res.json(survey);
     }
 
-    
     public static async update(req: express.Request, res: express.Response) {
         const survey: Survey = await SurveyRouter.getSurveyService().update(
             'demo-profile-id',

@@ -164,7 +164,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 {
                     include: [
                         { model: BaseRepository.models.Options },
-                        { model: BaseRepository.models.Answers }
+                        { model: BaseRepository.models.Answers },
                     ],
                     model: BaseRepository.models.Questions,
                 },
