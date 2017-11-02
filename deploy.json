@@ -21,6 +21,14 @@
         {
             "source": "$workspace/src",
             "destination": "/opt/survey-service/src"
+        },
+        {
+            "source": "$workspace/apidoc",
+            "destination": "/opt/survey-service/apidoc"
+        },
+        {
+            "source": "$workspace/coverage",
+            "destination": "/opt/survey-service/coverage"
         }
     ],
     "files": [

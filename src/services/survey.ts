@@ -53,7 +53,7 @@ export class SurveyService {
         let survey = await this.surveyRepository.find(id);
 
         if (survey.hasRespondents) {
-            throw new Error('Cannot update survey with respondents.');
+            throw new Error('Cannot update survey with respondents');
         }
 
         survey = new Survey(id, profileId, title, questions, false);
