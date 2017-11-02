@@ -50,44 +50,79 @@ export class SurveyRouter {
      *      }
      */
     public static async create(req: express.Request, res: express.Response) {
-        const survey: Survey = await SurveyRouter.getSurveyService().create(
-            'demo-profile-id',
-            req.body.title,
-            req.body.questions,
-        );
+        try {
+            const survey: Survey = await SurveyRouter.getSurveyService().create(
+                'demo-profile-id',
+                req.body.title,
+                req.body.questions,
+            );
 
-        res.json(survey);
+            res.json(survey);
+        } catch (err) {
+            res.status(500).json({
+                message: err.message,
+                stack: err.stack,
+            });
+        }
     }
 
     public static async update(req: express.Request, res: express.Response) {
-        const survey: Survey = await SurveyRouter.getSurveyService().update(
-            'demo-profile-id',
-            req.body.id,
-            req.body.title,
-            req.body.questions,
-        );
+        try {
+            const survey: Survey = await SurveyRouter.getSurveyService().update(
+                'demo-profile-id',
+                req.body.id,
+                req.body.title,
+                req.body.questions,
+            );
 
-        res.json(survey);
+            res.json(survey);
+        } catch (err) {
+            res.status(500).json({
+                message: err.message,
+                stack: err.stack,
+            });
+        }
     }
 
     public static async list(req: express.Request, res: express.Response) {
-        const surveys = await SurveyRouter.getSurveyService().list('demo-profile-id');
-        res.json(surveys);
+        try {
+            const surveys = await SurveyRouter.getSurveyService().list('demo-profile-id');
+            res.json(surveys);
+        } catch (err) {
+            res.status(500).json({
+                message: err.message,
+                stack: err.stack,
+            });
+        }
     }
 
     public static async find(req: express.Request, res: express.Response) {
-        const survey = await SurveyRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
-        res.json(survey);
+        try {
+            const survey = await SurveyRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
+            res.json(survey);
+        } catch (err) {
+            res.status(500).json({
+                message: err.message,
+                stack: err.stack,
+            });
+        }
     }
 
     public static async answerList(req: express.Request, res: express.Response) {
-        const answers = await SurveyRouter.getSurveyService().listAnswers('demo-profile-id', parseInt(req.query.surveyId, undefined), parseInt(req.query.questionId, undefined));
+        try {
+            const answers = await SurveyRouter.getSurveyService().listAnswers('demo-profile-id', parseInt(req.query.surveyId, undefined), parseInt(req.query.questionId, undefined));
 
-        res.json({
-            answers,
-            questionId: parseInt(req.query.questionId, undefined),
-            surveyId: parseInt(req.query.surveyId, undefined),
-        });
+            res.json({
+                answers,
+                questionId: parseInt(req.query.questionId, undefined),
+                surveyId: parseInt(req.query.surveyId, undefined),
+            });
+        } catch (err) {
+            res.status(500).json({
+                message: err.message,
+                stack: err.stack,
+            });
+        }
     }
 
     protected static getSurveyService(): SurveyService {
