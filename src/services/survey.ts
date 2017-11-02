@@ -35,7 +35,7 @@ export class SurveyService {
         questions: Question[],
     ): Promise<Survey> {
 
-        let survey = new Survey(null, profileId, title, questions);
+        let survey = new Survey(null, profileId, title, questions, false);
 
         survey = await this.surveyRepository.create(survey);
 
@@ -49,7 +49,7 @@ export class SurveyService {
         questions: Question[],
     ): Promise<Survey> {
 
-        let survey = new Survey(id, profileId, title, questions);
+        let survey = new Survey(id, profileId, title, questions, false);
 
         survey = await this.surveyRepository.update(survey);
 

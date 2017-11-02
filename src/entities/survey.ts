@@ -6,6 +6,7 @@ export class Survey {
         public profileId: string,
         public title: string,
         public questions: Question[],
+        public hasRespondents: boolean,
     ) {
 
     }

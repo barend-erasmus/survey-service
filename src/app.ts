@@ -125,18 +125,16 @@ app.post('/api/survey/create', requireUser, SurveyRouter.create);
 app.put('/api/survey/update', requireUser, SurveyRouter.update);
 app.get('/api/survey/list', requireUser, SurveyRouter.list);
 app.get('/api/survey/find', requireUser, SurveyRouter.find);
-app.get('/api/survey/answer/list', requireUser, SurveyRouter.listAnswers);
-
-app.get('/ui/dashboard', requireUser, UIRouter.dashboard);
+app.get('/api/survey/answer/list', requireUser, SurveyRouter.answerList);
 
 app.get('/ui/survey', requireUser, UIRouter.survey);
 app.post('/ui/survey', requireUser, UIRouter.surveySubmit);
 
-app.get('/ui/survey/results', requireUser, UIRouter.results);
-
-app.get('/ui/survey/manage', requireUser, UIRouter.surveys);
-app.get('/ui/survey/manage/create', requireUser, UIRouter.surveyCreate);
-app.get('/ui/survey/manage/edit', requireUser, UIRouter.surveyEdit);
+app.get('/ui/survey/list', requireUser, UIRouter.surveyList);
+app.get('/ui/survey/create', requireUser, UIRouter.surveyCreate);
+app.get('/ui/survey/edit', requireUser, UIRouter.surveyEdit);
+app.get('/ui/survey/dashboard', requireUser, UIRouter.surveyDashboard);
+app.get('/ui/survey/results', requireUser, UIRouter.surveyResults);
 
 app.listen(argv.port || 3000, () => {
     console.log(`listening on port ${argv.port || 3000}`);
@@ -215,6 +213,7 @@ app.listen(argv.port || 3000, () => {
 //             //     10,
 //             // ),
 //         ],
+//         false,
 //     ));
 // }).then((survey: Survey) => {
 

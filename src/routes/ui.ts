@@ -14,15 +14,31 @@ import { Survey } from './../entities/survey';
 
 export class UIRouter {
 
-    public static async dashboard(req: express.Request, res: express.Response) {
-        res.render('dashboard');
+    public static async surveyDashboard(req: express.Request, res: express.Response) {
+        res.render('survey/dashboard');
     }
 
-    public static async surveys(req: express.Request, res: express.Response) {
+    public static async surveyList(req: express.Request, res: express.Response) {
         const surveys: Survey[] = await UIRouter.getSurveyService().list('demo-profile-id');
 
-        res.render('surveys', {
+        res.render('survey/list', {
             surveys,
+        });
+    }
+
+    public static async surveyResults(req: express.Request, res: express.Response) {
+        res.render('survey/results');
+    }
+
+    public static async surveyCreate(req: express.Request, res: express.Response) {
+        res.render('survey/create', {});
+    }
+
+    public static async surveyEdit(req: express.Request, res: express.Response) {
+        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
+
+        res.render('survey/edit', {
+            survey,
         });
     }
 
@@ -33,10 +49,6 @@ export class UIRouter {
             layout: false,
             survey,
         });
-    }
-
-    public static async results(req: express.Request, res: express.Response) {
-        res.render('results');
     }
 
     public static async surveySubmit(req: express.Request, res: express.Response) {
@@ -63,18 +75,6 @@ export class UIRouter {
 
         res.render('thank-you', {
             layout: false,
-            survey,
-        });
-    }
-
-    public static async surveyCreate(req: express.Request, res: express.Response) {
-        res.render('survey-create', {});
-    }
-
-    public static async surveyEdit(req: express.Request, res: express.Response) {
-        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
-
-        res.render('survey-edit', {
             survey,
         });
     }

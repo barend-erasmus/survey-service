@@ -9,7 +9,7 @@
                 <a>Survey</a>
             </li>
             <li class="active">
-                <strong>Manage</strong>
+                <strong>List</strong>
             </li>
         </ol>
     </div>
@@ -24,7 +24,7 @@
                 <div class="ibox-title">
                     <h5>Surveys</h5>
                     <div class="ibox-tools">
-                        <a href="/ui/survey/manage/create" class="btn btn-primary">
+                        <a href="/ui/survey/create" class="btn btn-primary">
                             New Survey
                         </a>
                     </div>
@@ -50,8 +50,13 @@
                                     {{value.questions.length}}
                                 </td>
                                 <td>
-                                    <a href="/ui/survey/manage/edit?surveyId={{value.id}}" class="btn btn-primary">
-                                        Edit
+                                    {{#ifCond value.hasRespondents false}}
+                                        <a href="/ui/survey/edit?surveyId={{value.id}}" class="btn btn-primary">
+                                            Edit
+                                        </a>
+                                    {{/ifCond}}
+                                    <a href="/ui/survey/results?surveyId={{value.id}}" class="btn btn-primary">
+                                        Results
                                     </a>
                                 </td>
                             </tr>

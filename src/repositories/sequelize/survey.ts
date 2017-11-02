@@ -126,6 +126,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 {
                     include: [
                         { model: BaseRepository.models.Options },
+                        { model: BaseRepository.models.Answers },
                     ],
                     model: BaseRepository.models.Questions,
                 },
@@ -139,6 +140,8 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             return null;
         }
 
+        const totalAnswers = survey.questions.map((x) => x.answers.length).reduce((a, b) => a + b);
+
         return new Survey(
             survey.id,
             survey.profileId,
@@ -151,6 +154,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 parseInt(x.linearScaleMinimum, undefined),
                 parseInt(x.linearScaleMaximum, undefined),
             )),
+            totalAnswers > 0,
         );
     }
 
@@ -160,6 +164,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 {
                     include: [
                         { model: BaseRepository.models.Options },
+                        { model: BaseRepository.models.Answers }
                     ],
                     model: BaseRepository.models.Questions,
                 },
@@ -181,6 +186,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 parseInt(y.linearScaleMinimum, undefined),
                 parseInt(y.linearScaleMaximum, undefined),
             )),
+            x.questions.map((y) => y.answers.length).reduce((a, b) => a + b) > 0,
         ));
     }
 

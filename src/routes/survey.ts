@@ -44,7 +44,7 @@ export class SurveyRouter {
         res.json(survey);
     }
 
-    public static async listAnswers(req: express.Request, res: express.Response) {
+    public static async answerList(req: express.Request, res: express.Response) {
         const answers = await SurveyRouter.getSurveyService().listAnswers('demo-profile-id', parseInt(req.query.surveyId, undefined), parseInt(req.query.questionId, undefined));
 
         res.json({

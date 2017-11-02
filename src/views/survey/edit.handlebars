@@ -3,13 +3,10 @@
         <h2>Survey - Manage - Edit</h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/ui/dashboard">Home</a>
+                <a href="/ui/survey/dashboard">Home</a>
             </li>
             <li>
                 <a>Survey</a>
-            </li>
-            <li>
-                <a>Manage</a>
             </li>
             <li class="active">
                 <strong>Edit</strong>
@@ -236,7 +233,7 @@
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
-                    window.location = `/ui/survey?surveyId=${data.id}`;
+                    window.location = `/ui/survey/list`;
                 },
                 failure: function (err) {
                     alert(err);
