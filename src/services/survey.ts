@@ -48,8 +48,15 @@ export class SurveyService {
         title: string,
         questions: Question[],
     ): Promise<Survey> {
+        
 
-        let survey = new Survey(id, profileId, title, questions, false);
+        let survey = await this.surveyRepository.find(id);
+
+        if (survey.hasRespondents) {
+            throw new Error('Cannot update survey with respondents.');
+        }
+
+        survey = new Survey(id, profileId, title, questions, false);
 
         survey = await this.surveyRepository.update(survey);
 
