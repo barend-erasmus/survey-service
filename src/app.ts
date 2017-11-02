@@ -136,6 +136,9 @@ app.get('/ui/survey/edit', requireUser, UIRouter.surveyEdit);
 app.get('/ui/survey/dashboard', requireUser, UIRouter.surveyDashboard);
 app.get('/ui/survey/results', requireUser, UIRouter.surveyResults);
 
+app.use('/api/docs', express.static(path.join(__dirname, './../apidoc')));
+app.use('/api/coverage', express.static(path.join(__dirname, './../coverage/lcov-report')));
+
 app.listen(argv.port || 3000, () => {
     console.log(`listening on port ${argv.port || 3000}`);
 });

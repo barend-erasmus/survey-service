@@ -13,6 +13,42 @@ import { Survey } from './../entities/survey';
 
 export class SurveyRouter {
 
+    /**
+     * @api {post} /api/survey/create Create Survey
+     * @apiName CreateSurvey
+     * @apiGroup Survey
+     *
+     * @apiParam {string} title Title
+     * @apiParam {object[]} questions Questions
+     *
+     *
+     * @apiHeaderExample {json} Header-Example:
+     *      {
+     *          "Authorization": "Bearer <json-web-token>"
+     *      }
+     *
+     * @apiSuccessExample {json} Success-Response:
+     *      HTTP/1.1 200 OK
+     *      {  
+     *      "id":3,
+     *      "profileId":"demo-profile-id",
+     *      "title":"Test Survey",
+     *      "questions":[  
+     *          {  
+     *              "id":16,
+     *              "text":"Are you employed or unemployed?",
+     *              "type":"multiple-choice",
+     *              "options":[  
+     *                  "Employed",
+     *                  "Unemployed"
+     *              ],
+     *              "linearScaleMinimum":null,
+     *              "linearScaleMaximum":null
+     *          }
+     *      ],
+     *      "hasRespondents":false
+     *      }
+     */
     public static async create(req: express.Request, res: express.Response) {
         const survey: Survey = await SurveyRouter.getSurveyService().create(
             'demo-profile-id',
@@ -23,6 +59,7 @@ export class SurveyRouter {
         res.json(survey);
     }
 
+    
     public static async update(req: express.Request, res: express.Response) {
         const survey: Survey = await SurveyRouter.getSurveyService().update(
             'demo-profile-id',

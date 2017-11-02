@@ -23,7 +23,7 @@ export class SurveyService {
         const survey: Survey = await this.surveyRepository.find(surveyId);
 
         if (survey.profileId !== profileId) {
-            throw new Error('');
+            throw new Error('Invalid Profile Id');
         }
 
         return survey;
@@ -76,13 +76,13 @@ export class SurveyService {
         const survey: Survey = await this.surveyRepository.find(surveyId);
 
         if (survey.profileId !== profileId) {
-            throw new Error('');
+            throw new Error('Invalid Profile Id');
         }
 
         const question: Question = survey.questions.find((x) => x.id === questionId);
 
         if (!question) {
-            throw new Error('');
+            throw new Error('Invalid Question Id');
         }
 
         return this.surveyRepository.listAnswers(questionId);

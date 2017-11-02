@@ -12,6 +12,10 @@ export class SurveyRepository implements ISurveyRepository {
     public async create(survey: Survey): Promise<Survey> {
         survey.id = Math.floor(Math.random() * 1000);
 
+        survey.questions.forEach((item) => {
+            item.id = Math.floor(Math.random() * 1000);
+        });
+
         this.surveys.push(survey);
 
         return survey;

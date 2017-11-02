@@ -7,10 +7,10 @@
     "test": "tsc & mocha ./src/**/*.test.js",
     "coverage": "tsc & istanbul cover node_modules/mocha/bin/_mocha --root ./src ./src/**/*.test.js",
     "start": "tsc & node ./src/app.js",
-    "docs": "apidoc -i src/ -o apidoc/ -t ./template",
+    "docs": "apidoc -i src/routes/ -o apidoc/",
     "lint": "tslint ./src/**/*.ts --exclude ./src/**/*.d.ts",
     "sync": "tsc & node ./src/sync.js",
-    "deploy": "tsc & apidoc -i src/ -o apidoc/ & istanbul cover node_modules/mocha/bin/_mocha --root ./src ./src/**/*.test.js & ssh-deployer -f deploy.json --host 178.62.108.12 --username username --password password --workspace ./"
+    "deploy": "tsc & apidoc -i src/routes/ -o apidoc/ & istanbul cover node_modules/mocha/bin/_mocha --root ./src ./src/**/*.test.js & ssh-deployer -f deploy.json --host 178.62.108.12 --username username --password password --workspace ./"
   },
   "repository": {
     "type": "git",
