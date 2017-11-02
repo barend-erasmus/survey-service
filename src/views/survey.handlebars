@@ -50,7 +50,7 @@
                                 <textarea class="form-control" rows="5" name="question-{{question.id}}" data-parsley-required="" data-parsley-errors-container="#question-{{question.id}}"></textarea> 
                             {{/ifCond}} 
                             {{#ifCond question.type 'rating'}}
-                                <select class="form-control" name="question-{{question.id}}">
+                                <select class="form-control" name="question-{{question.id}}" data-parsley-required="" data-parsley-errors-container="#question-{{question.id}}">
                                     {{#for question.linearScaleMinimum question.linearScaleMaximum 1}}
                                     <option>{{this}}</option>
                                     {{/for}}

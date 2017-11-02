@@ -2,8 +2,11 @@
     <div class="col-lg-10">
         <h2>Dashboard</h2>
         <ol class="breadcrumb">
+           <li>
+                <a href="/ui/survey/dashboard">Home</a>
+            </li>
             <li>
-                <a href="/ui/dashboard">Home</a>
+                <a>Survey</a>
             </li>
             <li class="active">
                 <strong>Results</strong>
@@ -51,7 +54,7 @@
                     if (question.type === 'multiple-choice') {
                         $.ajax({
                             type: 'GET',
-                            url: `http://localhost:3000/api/survey/answer/list?surveyId=${survey.id}&questionId=${question.id}`,
+                            url: `/api/survey/answer/list?surveyId=${survey.id}&questionId=${question.id}`,
                             contentType: 'application/json; charset=utf-8',
                             dataType: 'json',
                             success: function (response) {
@@ -64,7 +67,7 @@
                     } else if (question.type === 'checkbox') {
                         $.ajax({
                             type: 'GET',
-                            url: `http://localhost:3000/api/survey/answer/list?surveyId=${survey.id}&questionId=${question.id}`,
+                            url: `/api/survey/answer/list?surveyId=${survey.id}&questionId=${question.id}`,
                             contentType: 'application/json; charset=utf-8',
                             dataType: 'json',
                             success: function (response) {
