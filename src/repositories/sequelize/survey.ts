@@ -140,7 +140,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             return null;
         }
 
-        const totalAnswers = survey.questions.length === 0? false : survey.questions.map((x) => x.answers.length).reduce((a, b) => a + b);
+        const totalAnswers = survey.questions.length === 0 ? false : survey.questions.map((x) => x.answers.length).reduce((a, b) => a + b);
 
         return new Survey(
             survey.id,
@@ -186,7 +186,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 parseInt(y.linearScaleMinimum, undefined),
                 parseInt(y.linearScaleMaximum, undefined),
             )),
-            x.questions.length === 0? false : x.questions.map((y) => y.answers.length).reduce((a, b) => a + b) > 0,
+            x.questions.length === 0 ? false : x.questions.map((y) => y.answers.length).reduce((a, b) => a + b) > 0,
         ));
     }
 

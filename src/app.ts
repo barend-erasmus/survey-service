@@ -14,6 +14,7 @@ import * as bodyParser from 'body-parser';
 import * as cookieSession from 'cookie-session';
 import * as exphbs from 'express-handlebars';
 import * as passport from 'passport';
+import * as GoogleStrategy from 'passport-google-oauth20';
 import * as OAuth2Strategy from 'passport-oauth2';
 
 // Imports routes
@@ -36,38 +37,24 @@ app.use(cookieSession({
 app.use(passport.initialize());
 
 passport.serializeUser((user: any, done: (err: Error, obj: any) => void) => {
-    done(null, user.username);
+    done(null, `${user.id}|${user.displayName}`);
 });
 
 passport.deserializeUser((id: string, done: (err: Error, obj: any) => void) => {
-    done(null, id);
+    done(null, {
+        displayName: id.split('|')[1],
+        id: id.split('|')[0],
+    });
 });
 
 app.use(passport.session());
 
-passport.use(new OAuth2Strategy({
-    authorizationURL: 'https://ketone.openservices.co.za/auth/authorize',
+passport.use(new GoogleStrategy({
     callbackURL: argv.prod ? `https://survey-service.openservices.co.za/ui/callback` : 'http://localhost:3000/ui/callback',
-    clientID: '6iqyZJQQ3GX2JWlT4UEz',
-    clientSecret: 'EHVqWXe5kCQNPspzSh8m',
-    tokenURL: 'https://ketone.openservices.co.za/auth/token',
-}, (accessToken: string, refreshToken: string, profile: any, cb) => {
-    request({
-        headers: {
-            authorization: `Bearer ${accessToken}`,
-        },
-        json: true,
-        uri: 'https://ketone.openservices.co.za/auth/user',
-    }).then((result: any) => {
-
-        if (result.client_id === '6iqyZJQQ3GX2JWlT4UEz') {
-            return cb(null, result);
-        } else {
-            return cb(new Error('Invalid Client Id'), null);
-        }
-    }).catch((err: Error) => {
-        return cb(err, null);
-    });
+    clientID: '747263281118-a6dpgtqjhscgapi88o7jqsv1ol1r67qv.apps.googleusercontent.com',
+    clientSecret: 'TTOZj8hjYF4r6t0qua5Oz6Vm',
+}, async (accessToken: string, refreshToken: string, profile: any, done: (err: Error, obj: any) => void) => {
+    return done(null, profile);
 }));
 
 // Configures body parser
@@ -101,22 +88,34 @@ app.engine('handlebars', exphbs({
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 
-app.get('/ui/login', passport.authenticate('oauth2'));
+app.get('/ui/login', passport.authenticate('google', {
+    failureRedirect: '/',
+    prompt: 'select_account',
+    scope: ['profile'],
+    session: true,
+    successRedirect: '/ui/survey/list',
+} as any));
 
-app.get('/ui/callback', passport.authenticate('oauth2', { failureRedirect: '/ui/login' }),
+app.get('/ui/callback', passport.authenticate('google', { failureRedirect: '/ui/login' }),
     (req: express.Request, res: express.Response) => {
         res.redirect(decodeURIComponent(req.query.state));
     });
 
 function requireUser(req: express.Request, res: express.Response, next: express.NextFunction) {
-    // if (!req.user) {
-    //     const options: any = {
-    //         state: encodeURIComponent(req.url),
-    //     };
+    if (!req.user) {
+        const options: any = {
 
-    //     passport.authenticate('oauth2', options)(req, res, next);
-    //     return;
-    // }
+            failureRedirect: '/',
+            prompt: 'select_account',
+            scope: ['profile'],
+            session: true,
+            state: encodeURIComponent(req.url),
+            successRedirect: '/ui/survey/list',
+        };
+
+        passport.authenticate('google', options)(req, res, next);
+        return;
+    }
 
     next();
 }
@@ -136,6 +135,11 @@ app.get('/ui/survey/edit', requireUser, UIRouter.surveyEdit);
 app.get('/ui/survey/dashboard', requireUser, UIRouter.surveyDashboard);
 app.get('/ui/survey/results', requireUser, UIRouter.surveyResults);
 
+app.get('/ui/logout', requireUser, (req: express.Request, res: express.Response) => {
+    req.logout();
+    res.send('Logged Out');
+});
+
 app.use('/api/docs', express.static(path.join(__dirname, './../apidoc')));
 app.use('/api/coverage', express.static(path.join(__dirname, './../coverage/lcov-report')));
 
@@ -150,7 +154,7 @@ app.listen(argv.port || 3000, () => {
 // surveyRepository.sync().then(() => {
 //     return surveyRepository.create(new Survey(
 //         null,
-//         'demo-profile-id',
+//         '104510562212077465584',
 //         'Brand Awareness',
 //         [
 //             new Question(
@@ -225,11 +229,11 @@ app.listen(argv.port || 3000, () => {
 //     for (let i = 0; i < 30; i++) {
 //         for (const question of survey.questions) {
 //             if (question.type === 'multiple-choice' || question.type === 'checkbox') {
-//                 promises.push(surveyRepository.saveAnswer(new Answer(question.id, 'demo-profile-id', [
+//                 promises.push(surveyRepository.saveAnswer(new Answer(question.id, '104510562212077465584', [
 //                     question.options[Math.floor(Math.random() * question.options.length)]
 //                 ], null)));
 //             } else {
-//                 promises.push(surveyRepository.saveAnswer(new Answer(question.id, 'demo-profile-id', [
+//                 promises.push(surveyRepository.saveAnswer(new Answer(question.id, '104510562212077465584', [
 //                     'Hello World'
 //                 ], null)));
 //             }

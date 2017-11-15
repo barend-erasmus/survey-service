@@ -52,7 +52,7 @@ export class SurveyRouter {
     public static async create(req: express.Request, res: express.Response) {
         try {
             const survey: Survey = await SurveyRouter.getSurveyService().create(
-                'demo-profile-id',
+                req.user.id,
                 req.body.title,
                 req.body.questions,
             );
@@ -69,7 +69,7 @@ export class SurveyRouter {
     public static async update(req: express.Request, res: express.Response) {
         try {
             const survey: Survey = await SurveyRouter.getSurveyService().update(
-                'demo-profile-id',
+                req.user.id,
                 req.body.id,
                 req.body.title,
                 req.body.questions,
@@ -86,7 +86,7 @@ export class SurveyRouter {
 
     public static async list(req: express.Request, res: express.Response) {
         try {
-            const surveys = await SurveyRouter.getSurveyService().list('demo-profile-id');
+            const surveys = await SurveyRouter.getSurveyService().list(req.user.id);
             res.json(surveys);
         } catch (err) {
             res.status(500).json({
@@ -98,7 +98,7 @@ export class SurveyRouter {
 
     public static async find(req: express.Request, res: express.Response) {
         try {
-            const survey = await SurveyRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
+            const survey = await SurveyRouter.getSurveyService().find(req.user.id, req.query.surveyId);
             res.json(survey);
         } catch (err) {
             res.status(500).json({
@@ -110,7 +110,7 @@ export class SurveyRouter {
 
     public static async answerList(req: express.Request, res: express.Response) {
         try {
-            const answers = await SurveyRouter.getSurveyService().listAnswers('demo-profile-id', parseInt(req.query.surveyId, undefined), parseInt(req.query.questionId, undefined));
+            const answers = await SurveyRouter.getSurveyService().listAnswers(req.user.id, parseInt(req.query.surveyId, undefined), parseInt(req.query.questionId, undefined));
 
             res.json({
                 answers,

@@ -19,10 +19,11 @@ export class UIRouter {
     }
 
     public static async surveyList(req: express.Request, res: express.Response) {
-        const surveys: Survey[] = await UIRouter.getSurveyService().list('demo-profile-id');
+        const surveys: Survey[] = await UIRouter.getSurveyService().list(req.user.id);
 
         res.render('survey/list', {
             surveys,
+            user: req.user,
         });
     }
 
@@ -35,7 +36,7 @@ export class UIRouter {
     }
 
     public static async surveyEdit(req: express.Request, res: express.Response) {
-        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
+        const survey: Survey = await UIRouter.getSurveyService().find(req.user.id, req.query.surveyId);
 
         res.render('survey/edit', {
             survey,
@@ -43,17 +44,22 @@ export class UIRouter {
     }
 
     public static async survey(req: express.Request, res: express.Response) {
-        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', req.query.surveyId);
+        try {
+            const survey: Survey = await UIRouter.getSurveyService().find(req.user.id, req.query.surveyId);
 
-        res.render('survey', {
-            layout: false,
-            survey,
-        });
+            res.render('survey', {
+                layout: false,
+                survey,
+            });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
     }
 
     public static async surveySubmit(req: express.Request, res: express.Response) {
 
-        const survey: Survey = await UIRouter.getSurveyService().find('demo-profile-id', parseInt(req.body.id, undefined));
+        const survey: Survey = await UIRouter.getSurveyService().find(req.user.id, parseInt(req.body.id, undefined));
 
         for (const key of Object.keys(req.body)) {
             if (key !== 'id') {
@@ -62,11 +68,11 @@ export class UIRouter {
                 const question: Question = survey.questions.find((x) => x.id === questionId);
 
                 if (question.type === 'multiple-choice') {
-                    await UIRouter.getSurveyService().saveAnswer(questionId, 'demo-profile-id', [req.body[key]], null);
+                    await UIRouter.getSurveyService().saveAnswer(questionId, req.user.id, [req.body[key]], null);
                 } else if (question.type === 'checkbox') {
-                    await UIRouter.getSurveyService().saveAnswer(questionId, 'demo-profile-id', req.body[key] instanceof Array ? req.body[key] : [req.body[key]], null);
+                    await UIRouter.getSurveyService().saveAnswer(questionId, req.user.id, req.body[key] instanceof Array ? req.body[key] : [req.body[key]], null);
                 } else if (question.type === 'text') {
-                    await UIRouter.getSurveyService().saveAnswer(questionId, 'demo-profile-id', [req.body[key]], null);
+                    await UIRouter.getSurveyService().saveAnswer(questionId, req.user.id, [req.body[key]], null);
                 } else {
                     throw new Error('');
                 }
