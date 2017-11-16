@@ -30,6 +30,12 @@ export class UIRouter {
         res.render('survey/edit', {});
     }
 
+    public static async survey(req: express.Request, res: express.Response) {
+        res.render('survey', {
+            layout: false,
+        });
+    }
+
     protected static getSurveyService(): SurveyService {
 
         const surveyRepository: SurveyRepository = new SurveyRepository(config.database.host, config.database.username, config.database.password);

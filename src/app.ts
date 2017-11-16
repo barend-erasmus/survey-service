@@ -129,6 +129,8 @@ app.get('/ui/survey/list', requireUser, UIRouter.surveyList);
 app.get('/ui/survey/create', requireUser, UIRouter.surveyCreate);
 app.get('/ui/survey/edit', requireUser, UIRouter.surveyEdit);
 
+app.get('/ui/survey', requireUser, UIRouter.survey);
+
 app.get('/ui/logout', requireUser, (req: express.Request, res: express.Response) => {
     req.logout();
     res.send('Logged Out');
