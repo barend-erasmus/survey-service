@@ -19,18 +19,18 @@ export class SurveyRouter {
     public static async create(req: express.Request, res: express.Response) {
         try {
 
-
             const body: Survey = req.body;
 
             let survey: Survey = new Survey(
                 body.cookieName,
                 body.id,
                 body.title,
-                body.pages.map((page) => new Page(
-                    page.elements.map((element) => new Element(
+                body.pages.map((page, pageOrder) => new Page(
+                    page.elements.map((element, elementOrder) => new Element(
                         element.type,
-                        element.choices? element.choices.map((choice) => new Choice(
+                        element.choices? element.choices.map((choice, choiceOrder) => new Choice(
                             typeof(choice) === 'string'? choice : choice.value,
+                            choiceOrder,
                             typeof(choice) === 'string'? choice : choice.text,
                         )) : null,
                         element.choicesOrder,
@@ -38,6 +38,7 @@ export class SurveyRouter {
                         element.inputType,
                         element.isRequired,
                         element.name,
+                        elementOrder,
                         element.placeHolder,
                         element.title,
                         element.rateMax,
@@ -45,11 +46,61 @@ export class SurveyRouter {
                         element.rateStep,
                     )),
                     page.name,
+                    pageOrder,
                 )),
                 null,
             );
 
             survey = await SurveyRouter.getSurveyService().create(
+                req.user.id,
+                survey
+            );
+
+            res.json(survey);
+        } catch (err) {
+            res.status(500).json({
+                message: err.message,
+                stack: err.stack,
+            });
+        }
+    }
+
+    public static async update(req: express.Request, res: express.Response) {
+        try {
+
+            const body: Survey = req.body;
+
+            let survey: Survey = new Survey(
+                body.cookieName,
+                body.id,
+                body.title,
+                body.pages.map((page, pageOrder) => new Page(
+                    page.elements.map((element, elementOrder) => new Element(
+                        element.type,
+                        element.choices? element.choices.map((choice, choiceOrder) => new Choice(
+                            typeof(choice) === 'string'? choice : choice.value,
+                            choiceOrder,
+                            typeof(choice) === 'string'? choice : choice.text,
+                        )) : null,
+                        element.choicesOrder,
+                        element.description,
+                        element.inputType,
+                        element.isRequired,
+                        element.name,
+                        elementOrder,
+                        element.placeHolder,
+                        element.title,
+                        element.rateMax,
+                        element.rateMin,
+                        element.rateStep,
+                    )),
+                    page.name,
+                    pageOrder,
+                )),
+                null,
+            );
+            
+            survey = await SurveyRouter.getSurveyService().update(
                 req.user.id,
                 survey
             );

@@ -40,4 +40,16 @@ export class SurveyService {
 
         return survey;
     }
+
+    public async update(
+        profileId: string,
+        survey: Survey
+    ): Promise<Survey> {
+
+        survey.profileId = profileId;
+
+        survey = await this.surveyRepository.update(survey);
+
+        return survey;
+    }
 }

@@ -121,6 +121,7 @@ function requireUser(req: express.Request, res: express.Response, next: express.
 }
 
 app.post('/api/survey/create', requireUser, SurveyRouter.create);
+app.post('/api/survey/update', requireUser, SurveyRouter.update);
 app.get('/api/survey/list', requireUser, SurveyRouter.list);
 app.get('/api/survey/find', requireUser, SurveyRouter.find);
 
@@ -140,8 +141,8 @@ app.listen(argv.port || 3000, () => {
     console.log(`listening on port ${argv.port || 3000}`);
 });
 
-// surveyRepository.sync().then(() => {
+surveyRepository.sync().then(() => {
 
-// }).then((result) => {
-//     console.log(result);
-// });
+}).then((result) => {
+    console.log(result);
+});

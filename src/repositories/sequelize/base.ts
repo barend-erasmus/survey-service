@@ -27,15 +27,39 @@ export class BaseRepository {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
+            order: {
+                allowNull: false,
+                type: Sequelize.NUMERIC,
+            },
         });
 
         const Elements = BaseRepository.sequelize.define('elements', {
-            type: {
-                allowNull: false,
+            description: {
+                allowNull: true,
                 type: Sequelize.STRING,
             },
             name: {
                 allowNull: false,
+                type: Sequelize.STRING,
+            },
+            order: {
+                allowNull: false,
+                type: Sequelize.NUMERIC,
+            },
+            title: {
+                allowNull: true,
+                type: Sequelize.STRING,
+            },
+            type: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+            maxRateDescription: {
+                allowNull: true,
+                type: Sequelize.STRING,
+            },
+            minRateDescription: {
+                allowNull: true,
                 type: Sequelize.STRING,
             },
         });
@@ -44,6 +68,10 @@ export class BaseRepository {
             value: {
                 allowNull: false,
                 type: Sequelize.STRING,
+            },
+            order: {
+                allowNull: false,
+                type: Sequelize.NUMERIC,
             },
             text: {
                 allowNull: true,
@@ -57,10 +85,10 @@ export class BaseRepository {
 
         Pages.hasMany(Elements, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
         Elements.belongsTo(Pages, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-       
+
         Elements.hasMany(Choices, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
         Choices.belongsTo(Elements, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-        
+
         this.models = {
             Choices,
             Elements,

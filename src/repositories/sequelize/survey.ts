@@ -24,14 +24,21 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                             choices: element.choices ? element.choices.map((choice) => {
                                 return {
                                     value: choice.value,
+                                    order: choice.order,
                                     text: choice.text,
                                 };
                             }) : [],
+                            description: element.description,
+                            maxRateDescription: null,
+                            minRateDescription: null,
                             name: element.name,
+                            order: element.order,
+                            title: element.title,
                             type: element.type,
                         };
                     }),
                     name: page.name,
+                    order: page.order,
                 };
             }),
             profileId: survey.profileId,
@@ -57,7 +64,32 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
     }
 
     public async update(survey: Survey): Promise<Survey> {
-        return survey;
+        const existingSurvey: any = await BaseRepository.models.Surveys.find({
+            include: [
+                {
+                    include: [
+                        {
+                            include: [
+                                { model: BaseRepository.models.Choices }
+                            ],
+                            model: BaseRepository.models.Elements
+                        },
+                    ],
+                    model: BaseRepository.models.Pages,
+                },
+            ],
+            where: {
+                id: survey.id,
+            },
+        });
+
+        if (!existingSurvey) {
+            return null;
+        }
+
+        await existingSurvey.destroy();
+
+        return this.create(survey);
 
     }
 
@@ -91,20 +123,22 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             survey.title,
             survey.pages.map((page) => new Page(
                 page.elements.map((element) => new Element(element.type,
-                    element.choices.map((choice) => new Choice(choice.value, choice.text)),
+                    element.choices.map((choice) => new Choice(choice.value, choice.order, choice.text)),
                     element.choicesOrder,
                     element.description,
                     element.inputType,
                     element.isRequired,
                     element.name,
+                    parseInt(element.order),
                     element.placeHolder,
                     element.title,
                     element.rateMax,
                     element.rateMin,
                     element.rateStep
-                )),
+                )).sort((a: Element, b: Element) => a.order - b.order),
                 page.name,
-            )),
+                parseInt(page.order),
+            )).sort((a: Page, b: Page) => a.order - b.order),
             survey.profileId,
         );
     }
@@ -135,20 +169,22 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             survey.title,
             survey.pages.map((page) => new Page(
                 page.elements.map((element) => new Element(element.type,
-                    element.choices.map((choice) => new Choice(choice.value, choice.text)),
+                    element.choices.map((choice) => new Choice(choice.value, choice.order, choice.text)),
                     element.choicesOrder,
                     element.description,
                     element.inputType,
                     element.isRequired,
                     element.name,
+                    parseInt(element.order),
                     element.placeHolder,
                     element.title,
                     element.rateMax,
                     element.rateMin,
                     element.rateStep
-                )),
+                )).sort((a: Element, b: Element) => a.order - b.order),
                 page.name,
-            )),
+                parseInt(page.order),
+            )).sort((a: Page, b: Page) => a.order - b.order),
             survey.profileId,
         ));
     }

@@ -49,6 +49,8 @@
 
         var json = JSON.parse(editor.text);
 
+        json.id = parseQueryString(location.search).surveyId;
+
         $.ajax({
             type: 'POST',
             url: `/api/survey/update`,
@@ -66,7 +68,7 @@
 
     $.ajax({
         type: 'GET',
-        url: `/api/survey/find?surveyId=1`,
+        url: `/api/survey/find?surveyId=${parseQueryString(location.search).surveyId}`,
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         success: function (data) {
@@ -77,6 +79,16 @@
         }
     });
 
+   function parseQueryString(url) {
+        var urlParams = {};
+        url.replace(
+            new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+            function ($0, $1, $2, $3) {
+                urlParams[$1] = $3;
+            }
+        );
 
+        return urlParams;
+    }
 
 </script>

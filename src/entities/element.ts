@@ -9,6 +9,7 @@ export class Element {
         public inputType: string, 
         public isRequired: boolean,
         public name: string,
+        public order: number,
         public placeHolder: string,
         public title: string,
         public rateMax: number,
