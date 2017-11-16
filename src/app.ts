@@ -141,8 +141,8 @@ app.listen(argv.port || 3000, () => {
     console.log(`listening on port ${argv.port || 3000}`);
 });
 
-surveyRepository.sync().then(() => {
+// surveyRepository.sync().then(() => {
 
-}).then((result) => {
-    console.log(result);
-});
+// }).then((result) => {
+//     console.log(result);
+// });

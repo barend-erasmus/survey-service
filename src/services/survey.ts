@@ -31,7 +31,7 @@ export class SurveyService {
 
     public async create(
         profileId: string,
-        survey: Survey
+        survey: Survey,
     ): Promise<Survey> {
 
         survey.profileId = profileId;
@@ -43,7 +43,7 @@ export class SurveyService {
 
     public async update(
         profileId: string,
-        survey: Survey
+        survey: Survey,
     ): Promise<Survey> {
 
         survey.profileId = profileId;

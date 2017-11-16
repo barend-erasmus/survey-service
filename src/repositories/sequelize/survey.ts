@@ -16,16 +16,15 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
 
     public async create(survey: Survey): Promise<Survey> {
         const result: any = await BaseRepository.models.Surveys.create({
-            title: survey.title,
             pages: survey.pages.map((page) => {
                 return {
                     elements: page.elements.map((element) => {
                         return {
                             choices: element.choices ? element.choices.map((choice) => {
                                 return {
-                                    value: choice.value,
                                     order: choice.order,
                                     text: choice.text,
+                                    value: choice.value,
                                 };
                             }) : [],
                             description: element.description,
@@ -42,15 +41,16 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 };
             }),
             profileId: survey.profileId,
+            title: survey.title,
         }, {
                 include: [
                     {
                         include: [
                             {
                                 include: [
-                                    { model: BaseRepository.models.Choices }
+                                    { model: BaseRepository.models.Choices },
                                 ],
-                                model: BaseRepository.models.Elements
+                                model: BaseRepository.models.Elements,
                             },
                         ],
                         model: BaseRepository.models.Pages,
@@ -70,9 +70,9 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     include: [
                         {
                             include: [
-                                { model: BaseRepository.models.Choices }
+                                { model: BaseRepository.models.Choices },
                             ],
-                            model: BaseRepository.models.Elements
+                            model: BaseRepository.models.Elements,
                         },
                     ],
                     model: BaseRepository.models.Pages,
@@ -100,9 +100,9 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     include: [
                         {
                             include: [
-                                { model: BaseRepository.models.Choices }
+                                { model: BaseRepository.models.Choices },
                             ],
-                            model: BaseRepository.models.Elements
+                            model: BaseRepository.models.Elements,
                         },
                     ],
                     model: BaseRepository.models.Pages,
@@ -123,21 +123,21 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             survey.title,
             survey.pages.map((page) => new Page(
                 page.elements.map((element) => new Element(element.type,
-                    element.choices.map((choice) => new Choice(choice.value, choice.order, choice.text)),
+                    element.choices.map((choice) => new Choice(choice.value, parseInt(choice.order, undefined), choice.text)).sort((a: Choice, b: Choice) => a.order - b.order),
                     element.choicesOrder,
                     element.description,
                     element.inputType,
                     element.isRequired,
                     element.name,
-                    parseInt(element.order),
+                    parseInt(element.order, undefined),
                     element.placeHolder,
                     element.title,
                     element.rateMax,
                     element.rateMin,
-                    element.rateStep
+                    element.rateStep,
                 )).sort((a: Element, b: Element) => a.order - b.order),
                 page.name,
-                parseInt(page.order),
+                parseInt(page.order, undefined),
             )).sort((a: Page, b: Page) => a.order - b.order),
             survey.profileId,
         );
@@ -150,9 +150,9 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     include: [
                         {
                             include: [
-                                { model: BaseRepository.models.Choices }
+                                { model: BaseRepository.models.Choices },
                             ],
-                            model: BaseRepository.models.Elements
+                            model: BaseRepository.models.Elements,
                         },
                     ],
                     model: BaseRepository.models.Pages,
@@ -169,21 +169,21 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             survey.title,
             survey.pages.map((page) => new Page(
                 page.elements.map((element) => new Element(element.type,
-                    element.choices.map((choice) => new Choice(choice.value, choice.order, choice.text)),
+                    element.choices.map((choice) => new Choice(choice.value, parseInt(choice.order, undefined), choice.text)).sort((a: Choice, b: Choice) => a.order - b.order),
                     element.choicesOrder,
                     element.description,
                     element.inputType,
                     element.isRequired,
                     element.name,
-                    parseInt(element.order),
+                    parseInt(element.order, undefined),
                     element.placeHolder,
                     element.title,
                     element.rateMax,
                     element.rateMin,
-                    element.rateStep
+                    element.rateStep,
                 )).sort((a: Element, b: Element) => a.order - b.order),
                 page.name,
-                parseInt(page.order),
+                parseInt(page.order, undefined),
             )).sort((a: Page, b: Page) => a.order - b.order),
             survey.profileId,
         ));

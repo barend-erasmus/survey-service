@@ -9,10 +9,10 @@ import { SurveyRepository } from './../repositories/sequelize/survey';
 import { SurveyService } from './../services/survey';
 
 // Imports models
-import { Survey } from './../entities/survey';
-import { Page } from '../entities/page';
-import { Element } from '../entities/element';
 import { Choice } from '../entities/choice';
+import { Element } from '../entities/element';
+import { Page } from '../entities/page';
+import { Survey } from './../entities/survey';
 
 export class SurveyRouter {
 
@@ -28,10 +28,10 @@ export class SurveyRouter {
                 body.pages.map((page, pageOrder) => new Page(
                     page.elements.map((element, elementOrder) => new Element(
                         element.type,
-                        element.choices? element.choices.map((choice, choiceOrder) => new Choice(
-                            typeof(choice) === 'string'? choice : choice.value,
+                        element.choices ? element.choices.map((choice, choiceOrder) => new Choice(
+                            typeof(choice) === 'string' ? choice : choice.value,
                             choiceOrder,
-                            typeof(choice) === 'string'? choice : choice.text,
+                            typeof(choice) === 'string' ? choice : choice.text,
                         )) : null,
                         element.choicesOrder,
                         element.description,
@@ -53,7 +53,7 @@ export class SurveyRouter {
 
             survey = await SurveyRouter.getSurveyService().create(
                 req.user.id,
-                survey
+                survey,
             );
 
             res.json(survey);
@@ -77,10 +77,10 @@ export class SurveyRouter {
                 body.pages.map((page, pageOrder) => new Page(
                     page.elements.map((element, elementOrder) => new Element(
                         element.type,
-                        element.choices? element.choices.map((choice, choiceOrder) => new Choice(
-                            typeof(choice) === 'string'? choice : choice.value,
+                        element.choices ? element.choices.map((choice, choiceOrder) => new Choice(
+                            typeof(choice) === 'string' ? choice : choice.value,
                             choiceOrder,
-                            typeof(choice) === 'string'? choice : choice.text,
+                            typeof(choice) === 'string' ? choice : choice.text,
                         )) : null,
                         element.choicesOrder,
                         element.description,
@@ -99,10 +99,10 @@ export class SurveyRouter {
                 )),
                 null,
             );
-            
+
             survey = await SurveyRouter.getSurveyService().update(
                 req.user.id,
-                survey
+                survey,
             );
 
             res.json(survey);

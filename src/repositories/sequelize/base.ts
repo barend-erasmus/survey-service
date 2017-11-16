@@ -12,12 +12,12 @@ export class BaseRepository {
 
     private static defineModels(): void {
         const Surveys = BaseRepository.sequelize.define('surveys', {
-            title: {
-                allowNull: true,
-                type: Sequelize.STRING,
-            },
             profileId: {
                 allowNull: false,
+                type: Sequelize.STRING,
+            },
+            title: {
+                allowNull: true,
                 type: Sequelize.STRING,
             },
         });
@@ -38,6 +38,14 @@ export class BaseRepository {
                 allowNull: true,
                 type: Sequelize.STRING,
             },
+            maxRateDescription: {
+                allowNull: true,
+                type: Sequelize.STRING,
+            },
+            minRateDescription: {
+                allowNull: true,
+                type: Sequelize.STRING,
+            },
             name: {
                 allowNull: false,
                 type: Sequelize.STRING,
@@ -54,21 +62,9 @@ export class BaseRepository {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            maxRateDescription: {
-                allowNull: true,
-                type: Sequelize.STRING,
-            },
-            minRateDescription: {
-                allowNull: true,
-                type: Sequelize.STRING,
-            },
         });
 
         const Choices = BaseRepository.sequelize.define('choices', {
-            value: {
-                allowNull: false,
-                type: Sequelize.STRING,
-            },
             order: {
                 allowNull: false,
                 type: Sequelize.NUMERIC,
@@ -77,8 +73,11 @@ export class BaseRepository {
                 allowNull: true,
                 type: Sequelize.STRING,
             },
+            value: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
         });
-
 
         Surveys.hasMany(Pages, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
         Pages.belongsTo(Surveys, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });

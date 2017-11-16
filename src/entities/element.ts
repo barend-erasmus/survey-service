@@ -6,7 +6,7 @@ export class Element {
         public choices: Choice[],
         public choicesOrder: string,
         public description: string,
-        public inputType: string, 
+        public inputType: string,
         public isRequired: boolean,
         public name: string,
         public order: number,
