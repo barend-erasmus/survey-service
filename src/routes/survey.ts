@@ -29,9 +29,9 @@ export class SurveyRouter {
                     page.elements.map((element, elementOrder) => new Element(
                         element.type,
                         element.choices ? element.choices.map((choice, choiceOrder) => new Choice(
-                            typeof(choice) === 'string' ? choice : choice.value,
                             choiceOrder,
                             typeof(choice) === 'string' ? choice : choice.text,
+                            typeof(choice) === 'string' ? choice : choice.value,
                         )) : null,
                         element.choicesOrder,
                         element.description,
@@ -78,9 +78,9 @@ export class SurveyRouter {
                     page.elements.map((element, elementOrder) => new Element(
                         element.type,
                         element.choices ? element.choices.map((choice, choiceOrder) => new Choice(
-                            typeof(choice) === 'string' ? choice : choice.value,
                             choiceOrder,
                             typeof(choice) === 'string' ? choice : choice.text,
+                            typeof(choice) === 'string' ? choice : choice.value,
                         )) : null,
                         element.choicesOrder,
                         element.description,
