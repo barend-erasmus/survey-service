@@ -2,7 +2,6 @@
 import { ISurveyRepository } from './../survey';
 
 // Imports models
-import { Answer } from './../../entities/answer';
 import { Survey } from './../../entities/survey';
 
 export class SurveyRepository implements ISurveyRepository {
@@ -11,10 +10,6 @@ export class SurveyRepository implements ISurveyRepository {
 
     public async create(survey: Survey): Promise<Survey> {
         survey.id = Math.floor(Math.random() * 1000);
-
-        survey.questions.forEach((item) => {
-            item.id = Math.floor(Math.random() * 1000);
-        });
 
         this.surveys.push(survey);
 
@@ -31,13 +26,5 @@ export class SurveyRepository implements ISurveyRepository {
 
     public async list(profileId: string): Promise<Survey[]> {
         return this.surveys.filter((x) => x.profileId === profileId);
-    }
-
-    public async saveAnswer(answer: Answer): Promise<boolean> {
-            return true;
-    }
-
-    public async listAnswers(questionId: number): Promise<Answer[]> {
-        return [];
     }
 }

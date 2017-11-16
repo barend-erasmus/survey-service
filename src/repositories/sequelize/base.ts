@@ -4,86 +4,67 @@ import * as Sequelize from 'sequelize';
 export class BaseRepository {
     protected static sequelize: Sequelize.Sequelize = null;
     protected static models: {
-        Answers: Sequelize.Model<{}, {}>,
-        AnswerTextValues: Sequelize.Model<{}, {}>,
+        Choices: Sequelize.Model<{}, {}>,
+        Elements: Sequelize.Model<{}, {}>,
+        Pages: Sequelize.Model<{}, {}>,
         Surveys: Sequelize.Model<{}, {}>,
-        Questions: Sequelize.Model<{}, {}>,
-        Options: Sequelize.Model<{}, {}>,
     } = null;
 
     private static defineModels(): void {
         const Surveys = BaseRepository.sequelize.define('surveys', {
-            profileId: {
-                allowNull: false,
+            title: {
+                allowNull: true,
                 type: Sequelize.STRING,
             },
-            title: {
+            profileId: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
         });
 
-        const Questions = BaseRepository.sequelize.define('questions', {
-            linearScaleMaximum: {
-                allowNull: true,
-                type: Sequelize.NUMERIC,
-            },
-            linearScaleMinimum: {
-                allowNull: true,
-                type: Sequelize.NUMERIC,
-            },
-            text: {
-                allowNull: true,
+        const Pages = BaseRepository.sequelize.define('pages', {
+            name: {
+                allowNull: false,
                 type: Sequelize.STRING,
             },
+        });
+
+        const Elements = BaseRepository.sequelize.define('elements', {
             type: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-        });
-
-        const Options = BaseRepository.sequelize.define('options', {
-            text: {
+            name: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
         });
 
-        const Answers = BaseRepository.sequelize.define('answers', {
-            numericValue: {
+        const Choices = BaseRepository.sequelize.define('choices', {
+            value: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+            text: {
                 allowNull: true,
-                type: Sequelize.NUMERIC,
-            },
-            profileId: {
-                allowNull: false,
                 type: Sequelize.STRING,
             },
         });
 
-        const AnswerTextValues = BaseRepository.sequelize.define('answerTextValues', {
-            text: {
-                allowNull: false,
-                type: Sequelize.STRING,
-            },
-        });
 
-        Surveys.hasMany(Questions, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-        Questions.belongsTo(Surveys, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        Surveys.hasMany(Pages, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        Pages.belongsTo(Surveys, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
-        Questions.hasMany(Options, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-        Options.belongsTo(Questions, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-
-        Questions.hasMany(Answers, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-        Answers.belongsTo(Questions, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-
-        Answers.hasMany(AnswerTextValues, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-        AnswerTextValues.belongsTo(Answers, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-
+        Pages.hasMany(Elements, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        Elements.belongsTo(Pages, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+       
+        Elements.hasMany(Choices, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        Choices.belongsTo(Elements, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        
         this.models = {
-            AnswerTextValues,
-            Answers,
-            Options,
-            Questions,
+            Choices,
+            Elements,
+            Pages,
             Surveys,
         };
     }

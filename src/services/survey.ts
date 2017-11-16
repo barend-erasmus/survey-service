@@ -5,8 +5,8 @@ import { config } from './../config';
 import { ISurveyRepository } from './../repositories/survey';
 
 // Imports models
-import { Answer } from './../entities/answer';
-import { Question } from './../entities/question';
+import { Element } from './../entities/element';
+import { Page } from './../entities/page';
 import { Survey } from './../entities/survey';
 
 export class SurveyService {
@@ -31,66 +31,13 @@ export class SurveyService {
 
     public async create(
         profileId: string,
-        title: string,
-        questions: Question[],
+        survey: Survey
     ): Promise<Survey> {
 
-        let survey = new Survey(null, profileId, title, questions, false);
+        survey.profileId = profileId;
 
         survey = await this.surveyRepository.create(survey);
 
         return survey;
-    }
-
-    public async update(
-        profileId: string,
-        id: number,
-        title: string,
-        questions: Question[],
-    ): Promise<Survey> {
-
-        let survey = await this.surveyRepository.find(id);
-
-        if (survey.hasRespondents) {
-            throw new Error('Cannot update survey with respondents');
-        }
-
-        survey = new Survey(id, profileId, title, questions, false);
-
-        survey = await this.surveyRepository.update(survey);
-
-        return survey;
-    }
-
-    public async saveAnswer(
-        questionId: number,
-        profileId: string,
-        textValues: string[],
-        numericValue: number,
-    ): Promise<boolean> {
-        const answer: Answer = new Answer(questionId, profileId, textValues, numericValue);
-
-        return this.surveyRepository.saveAnswer(answer);
-    }
-
-    public async listAnswers(
-        profileId: string,
-        surveyId: number,
-        questionId: number,
-    ): Promise<Answer[]> {
-
-        const survey: Survey = await this.surveyRepository.find(surveyId);
-
-        if (survey.profileId !== profileId) {
-            throw new Error('Invalid Profile Id');
-        }
-
-        const question: Question = survey.questions.find((x) => x.id === questionId);
-
-        if (!question) {
-            throw new Error('Invalid Question Id');
-        }
-
-        return this.surveyRepository.listAnswers(questionId);
     }
 }

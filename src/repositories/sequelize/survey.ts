@@ -3,8 +3,9 @@ import { ISurveyRepository } from './../survey';
 import { BaseRepository } from './base';
 
 // Imports models
-import { Answer } from './../../entities/answer';
-import { Question } from './../../entities/question';
+import { Choice } from './../../entities/choice';
+import { Element } from './../../entities/element';
+import { Page } from './../../entities/page';
 import { Survey } from './../../entities/survey';
 
 export class SurveyRepository extends BaseRepository implements ISurveyRepository {
@@ -14,110 +15,50 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
     }
 
     public async create(survey: Survey): Promise<Survey> {
-
         const result: any = await BaseRepository.models.Surveys.create({
-            profileId: survey.profileId,
-            questions: survey.questions.map((x) => {
+            title: survey.title,
+            pages: survey.pages.map((page) => {
                 return {
-                    linearScaleMaximum: x.linearScaleMaximum,
-                    linearScaleMinimum: x.linearScaleMinimum,
-                    options: x.options.map((y) => {
+                    elements: page.elements.map((element) => {
                         return {
-                            text: y,
+                            choices: element.choices ? element.choices.map((choice) => {
+                                return {
+                                    value: choice.value,
+                                    text: choice.text,
+                                };
+                            }) : [],
+                            name: element.name,
+                            type: element.type,
                         };
                     }),
-                    text: x.text,
-                    type: x.type,
+                    name: page.name,
                 };
             }),
-            title: survey.title,
+            profileId: survey.profileId,
         }, {
                 include: [
                     {
                         include: [
-                            { model: BaseRepository.models.Options },
+                            {
+                                include: [
+                                    { model: BaseRepository.models.Choices }
+                                ],
+                                model: BaseRepository.models.Elements
+                            },
                         ],
-                        model: BaseRepository.models.Questions,
+                        model: BaseRepository.models.Pages,
                     },
                 ],
             });
 
         survey.id = result.id;
 
-        const questions: any[] = await BaseRepository.models.Questions.findAll({
-            include: [
-                { model: BaseRepository.models.Options },
-            ],
-            where: {
-                surveyId: survey.id,
-            },
-        });
-
-        survey.questions = questions.map((x) => new Question(
-            x.id,
-            x.text,
-            x.type,
-            x.options.map((y) => y.text),
-            x.linearScaleMinimum,
-            x.linearScaleMaximum,
-        ));
-
         return survey;
     }
 
     public async update(survey: Survey): Promise<Survey> {
-
-        const existingSurvey: Survey = await this.find(survey.id);
-
-        for (const question of existingSurvey.questions) {
-            for (const option of question.options) {
-                await BaseRepository.models.Options.destroy({
-                    where: {
-                        questionId: question.id,
-                        text: option,
-                    },
-                });
-            }
-
-            await BaseRepository.models.Questions.destroy({
-                where: {
-                    id: question.id,
-                    surveyId: existingSurvey.id,
-                },
-            });
-        }
-
-        await BaseRepository.models.Surveys.update({
-            title: survey.title,
-        },
-            {
-                where: {
-                    id: survey.id,
-                },
-            });
-
-        for (const question of survey.questions) {
-            await BaseRepository.models.Questions.create({
-                linearScaleMaximum: question.linearScaleMaximum,
-                linearScaleMinimum: question.linearScaleMinimum,
-                options: question.options.map((y) => {
-                    return {
-                        text: y,
-                    };
-                }),
-                surveyId: survey.id,
-                text: question.text,
-                type: question.type,
-            }, {
-                    include: [
-                        { model: BaseRepository.models.Options },
-                    ],
-                });
-        }
-
-        survey = await this.find(survey.id);
-
         return survey;
+
     }
 
     public async find(surveyId: number): Promise<Survey> {
@@ -125,10 +66,14 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             include: [
                 {
                     include: [
-                        { model: BaseRepository.models.Options },
-                        { model: BaseRepository.models.Answers },
+                        {
+                            include: [
+                                { model: BaseRepository.models.Choices }
+                            ],
+                            model: BaseRepository.models.Elements
+                        },
                     ],
-                    model: BaseRepository.models.Questions,
+                    model: BaseRepository.models.Pages,
                 },
             ],
             where: {
@@ -140,21 +85,27 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             return null;
         }
 
-        const totalAnswers = survey.questions.length === 0 ? false : survey.questions.map((x) => x.answers.length).reduce((a, b) => a + b);
-
         return new Survey(
+            survey.cookieName,
             survey.id,
-            survey.profileId,
             survey.title,
-            survey.questions.map((x) => new Question(
-                x.id,
-                x.text,
-                x.type,
-                x.options.map((y) => y.text),
-                parseInt(x.linearScaleMinimum, undefined),
-                parseInt(x.linearScaleMaximum, undefined),
+            survey.pages.map((page) => new Page(
+                page.elements.map((element) => new Element(element.type,
+                    element.choices.map((choice) => new Choice(choice.value, choice.text)),
+                    element.choicesOrder,
+                    element.description,
+                    element.inputType,
+                    element.isRequired,
+                    element.name,
+                    element.placeHolder,
+                    element.title,
+                    element.rateMax,
+                    element.rateMin,
+                    element.rateStep
+                )),
+                page.name,
             )),
-            totalAnswers > 0,
+            survey.profileId,
         );
     }
 
@@ -163,10 +114,14 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             include: [
                 {
                     include: [
-                        { model: BaseRepository.models.Options },
-                        { model: BaseRepository.models.Answers },
+                        {
+                            include: [
+                                { model: BaseRepository.models.Choices }
+                            ],
+                            model: BaseRepository.models.Elements
+                        },
                     ],
-                    model: BaseRepository.models.Questions,
+                    model: BaseRepository.models.Pages,
                 },
             ],
             where: {
@@ -174,56 +129,27 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             },
         });
 
-        return surveys.map((x) => new Survey(
-            x.id,
-            x.profileId,
-            x.title,
-            x.questions.map((y) => new Question(
-                y.id,
-                y.text,
-                y.type,
-                y.options.map((z) => z.text),
-                parseInt(y.linearScaleMinimum, undefined),
-                parseInt(y.linearScaleMaximum, undefined),
+        return surveys.map((survey) => new Survey(
+            survey.cookieName,
+            survey.id,
+            survey.title,
+            survey.pages.map((page) => new Page(
+                page.elements.map((element) => new Element(element.type,
+                    element.choices.map((choice) => new Choice(choice.value, choice.text)),
+                    element.choicesOrder,
+                    element.description,
+                    element.inputType,
+                    element.isRequired,
+                    element.name,
+                    element.placeHolder,
+                    element.title,
+                    element.rateMax,
+                    element.rateMin,
+                    element.rateStep
+                )),
+                page.name,
             )),
-            x.questions.length === 0 ? false : x.questions.map((y) => y.answers.length).reduce((a, b) => a + b) > 0,
+            survey.profileId,
         ));
-    }
-
-    public async saveAnswer(answer: Answer): Promise<boolean> {
-
-        const result: any = await BaseRepository.models.Answers.create({
-            answerTextValues: answer.textValues.map((x) => {
-                return {
-                    text: x,
-                };
-            }),
-            numericValue: answer.numericValue,
-            profileId: answer.profileId,
-            questionId: answer.questionId,
-        }, {
-                include: [
-                    {
-                        model: BaseRepository.models.AnswerTextValues,
-                    },
-                ],
-            });
-        return true;
-    }
-
-    public async listAnswers(questionId: number): Promise<Answer[]> {
-
-        const answers: any[] = await BaseRepository.models.Answers.findAll({
-            include: [
-                {
-                    model: BaseRepository.models.AnswerTextValues,
-                },
-            ],
-            where: {
-                questionId,
-            },
-        });
-
-        return answers.map((x) => new Answer(questionId, x.profileId, x.answerTextValues.map((y) => y.text), x.numericValue));
     }
 }

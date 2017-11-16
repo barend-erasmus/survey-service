@@ -9,14 +9,9 @@ import { SurveyRepository } from './../repositories/sequelize/survey';
 import { SurveyService } from './../services/survey';
 
 // Imports models
-import { Question } from './../entities/question';
 import { Survey } from './../entities/survey';
 
 export class UIRouter {
-
-    public static async surveyDashboard(req: express.Request, res: express.Response) {
-        res.render('survey/dashboard');
-    }
 
     public static async surveyList(req: express.Request, res: express.Response) {
         const surveys: Survey[] = await UIRouter.getSurveyService().list(req.user.id);
@@ -27,62 +22,12 @@ export class UIRouter {
         });
     }
 
-    public static async surveyResults(req: express.Request, res: express.Response) {
-        res.render('survey/results');
-    }
-
     public static async surveyCreate(req: express.Request, res: express.Response) {
         res.render('survey/create', {});
     }
 
     public static async surveyEdit(req: express.Request, res: express.Response) {
-        const survey: Survey = await UIRouter.getSurveyService().find(req.user.id, req.query.surveyId);
-
-        res.render('survey/edit', {
-            survey,
-        });
-    }
-
-    public static async survey(req: express.Request, res: express.Response) {
-        try {
-            const survey: Survey = await UIRouter.getSurveyService().find(req.user.id, req.query.surveyId);
-
-            res.render('survey', {
-                layout: false,
-                survey,
-            });
-        } catch (err) {
-            console.error(err);
-            res.status(500).send(err.message);
-        }
-    }
-
-    public static async surveySubmit(req: express.Request, res: express.Response) {
-
-        const survey: Survey = await UIRouter.getSurveyService().find(req.user.id, parseInt(req.body.id, undefined));
-
-        for (const key of Object.keys(req.body)) {
-            if (key !== 'id') {
-                const questionId: number = parseInt(key.split('-')[1], undefined);
-
-                const question: Question = survey.questions.find((x) => x.id === questionId);
-
-                if (question.type === 'multiple-choice') {
-                    await UIRouter.getSurveyService().saveAnswer(questionId, req.user.id, [req.body[key]], null);
-                } else if (question.type === 'checkbox') {
-                    await UIRouter.getSurveyService().saveAnswer(questionId, req.user.id, req.body[key] instanceof Array ? req.body[key] : [req.body[key]], null);
-                } else if (question.type === 'text') {
-                    await UIRouter.getSurveyService().saveAnswer(questionId, req.user.id, [req.body[key]], null);
-                } else {
-                    throw new Error('');
-                }
-            }
-        }
-
-        res.render('thank-you', {
-            layout: false,
-            survey,
-        });
+        res.render('survey/edit', {});
     }
 
     protected static getSurveyService(): SurveyService {

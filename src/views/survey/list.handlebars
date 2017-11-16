@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Survey - Manage</h2>
+        <h2>Survey - List</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="/ui/dashboard">Home</a>
@@ -34,7 +34,7 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th># of Questions</th>
+                                <th># of Pages</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -43,20 +43,15 @@
                             <tr>
                                 <td>
                                     <a target="_blank" href="/ui/survey?surveyId={{value.id}}">
-                                        {{value.title}}
+                                        {{value.name}}
                                     </a>
                                 </td>
                                 <td>
-                                    {{value.questions.length}}
+                                    {{value.pages.length}}
                                 </td>
                                 <td>
-                                    {{#ifCond value.hasRespondents false}}
-                                        <a href="/ui/survey/edit?surveyId={{value.id}}" class="btn btn-primary">
-                                            Edit
-                                        </a>
-                                    {{/ifCond}}
-                                    <a href="/ui/survey/results?surveyId={{value.id}}" class="btn btn-primary">
-                                        Results
+                                    <a href="/ui/survey/edit?surveyId={{value.id}}" class="btn btn-primary">
+                                        Edit
                                     </a>
                                 </td>
                             </tr>

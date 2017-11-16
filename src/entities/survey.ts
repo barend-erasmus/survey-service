@@ -1,12 +1,12 @@
-import { Question } from './question';
+import { Page } from './page';
 
 export class Survey {
     constructor(
+        public cookieName: string,
         public id: number,
-        public profileId: string,
         public title: string,
-        public questions: Question[],
-        public hasRespondents: boolean,
+        public pages: Page[],
+        public profileId: string,
     ) {
 
     }

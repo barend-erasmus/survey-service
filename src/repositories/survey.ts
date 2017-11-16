@@ -1,5 +1,4 @@
 // Imports models
-import { Answer } from './../entities/answer';
 import { Survey } from './../entities/survey';
 
 export interface ISurveyRepository {
@@ -8,7 +7,4 @@ export interface ISurveyRepository {
     update(survey: Survey): Promise<Survey>;
     find(surveyId: number): Promise<Survey>;
     list(profileId: string): Promise<Survey[]>;
-
-    saveAnswer(answer: Answer): Promise<boolean>;
-    listAnswers(questionId: number): Promise<Answer[]>;
 }
