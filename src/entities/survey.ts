@@ -4,9 +4,9 @@ export class Survey {
     constructor(
         public cookieName: string,
         public id: number,
-        public title: string,
         public pages: Page[],
         public profileId: string,
+        public title: string,
     ) {
 
     }

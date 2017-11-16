@@ -120,7 +120,6 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
         return new Survey(
             survey.cookieName,
             survey.id,
-            survey.title,
             survey.pages.map((page) => new Page(
                 page.elements.map((element) => new Element(
                     element.choices.map((choice) => new Choice(parseInt(choice.order, undefined), choice.text, choice.value)).sort((a: Choice, b: Choice) => a.order - b.order),
@@ -141,6 +140,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 parseInt(page.order, undefined),
             )).sort((a: Page, b: Page) => a.order - b.order),
             survey.profileId,
+            survey.title,
         );
     }
 
@@ -167,7 +167,6 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
         return surveys.map((survey) => new Survey(
             survey.cookieName,
             survey.id,
-            survey.title,
             survey.pages.map((page) => new Page(
                 page.elements.map((element) => new Element(
                     element.choices.map((choice) => new Choice(parseInt(choice.order, undefined), choice.text, choice.value)).sort((a: Choice, b: Choice) => a.order - b.order),
@@ -188,6 +187,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 parseInt(page.order, undefined),
             )).sort((a: Page, b: Page) => a.order - b.order),
             survey.profileId,
+            survey.title,
         ));
     }
 }

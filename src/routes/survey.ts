@@ -24,7 +24,6 @@ export class SurveyRouter {
             let survey: Survey = new Survey(
                 body.cookieName,
                 body.id,
-                body.title,
                 body.pages.map((page, pageOrder) => new Page(
                     page.elements.map((element, elementOrder) => new Element(
                         element.choices ? element.choices.map((choice, choiceOrder) => new Choice(
@@ -49,6 +48,7 @@ export class SurveyRouter {
                     pageOrder,
                 )),
                 null,
+                body.title,
             );
 
             survey = await SurveyRouter.getSurveyService().create(
@@ -73,7 +73,6 @@ export class SurveyRouter {
             let survey: Survey = new Survey(
                 body.cookieName,
                 body.id,
-                body.title,
                 body.pages.map((page, pageOrder) => new Page(
                     page.elements.map((element, elementOrder) => new Element(
                         
@@ -99,6 +98,7 @@ export class SurveyRouter {
                     pageOrder,
                 )),
                 null,
+                body.title,
             );
 
             survey = await SurveyRouter.getSurveyService().update(
