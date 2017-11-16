@@ -1,12 +1,16 @@
 // Imports
 import * as Sequelize from 'sequelize';
+import { Survey } from '../../entities/survey';
+import { Element } from '../../entities/element';
 
 export class BaseRepository {
     protected static sequelize: Sequelize.Sequelize = null;
     protected static models: {
+        Answers: Sequelize.Model<{}, {}>,
         Choices: Sequelize.Model<{}, {}>,
         Elements: Sequelize.Model<{}, {}>,
         Pages: Sequelize.Model<{}, {}>,
+        Responses: Sequelize.Model<{}, {}>,
         Surveys: Sequelize.Model<{}, {}>,
     } = null;
 
@@ -79,6 +83,20 @@ export class BaseRepository {
             },
         });
 
+        const Responses = BaseRepository.sequelize.define('responses', {
+            profileId: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+        });
+
+        const Answers = BaseRepository.sequelize.define('answers', {
+            value: {
+                allowNull: false,
+                type: Sequelize.STRING,
+            },
+        });
+
         Surveys.hasMany(Pages, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
         Pages.belongsTo(Surveys, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
@@ -88,10 +106,21 @@ export class BaseRepository {
         Elements.hasMany(Choices, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
         Choices.belongsTo(Elements, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
+        Surveys.hasMany(Responses, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        Responses.belongsTo(Surveys, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+
+        Responses.hasMany(Answers, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        Answers.belongsTo(Responses, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+
+        Elements.hasMany(Answers, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+        Answers.belongsTo(Elements, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+
         this.models = {
+            Answers,
             Choices,
             Elements,
             Pages,
+            Responses,
             Surveys,
         };
     }
