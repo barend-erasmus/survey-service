@@ -2,7 +2,6 @@ import { Choice } from './choice';
 
 export class Element {
     constructor(
-        public type: string,
         public choices: Choice[],
         public choicesOrder: string,
         public description: string,
@@ -11,10 +10,11 @@ export class Element {
         public name: string,
         public order: number,
         public placeHolder: string,
-        public title: string,
         public rateMax: number,
         public rateMin: number,
         public rateStep: number,
+        public title: string,
+        public type: string,
     ) {
 
     }

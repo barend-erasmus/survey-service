@@ -27,7 +27,6 @@ export class SurveyRouter {
                 body.title,
                 body.pages.map((page, pageOrder) => new Page(
                     page.elements.map((element, elementOrder) => new Element(
-                        element.type,
                         element.choices ? element.choices.map((choice, choiceOrder) => new Choice(
                             choiceOrder,
                             typeof(choice) === 'string' ? choice : choice.text,
@@ -40,10 +39,11 @@ export class SurveyRouter {
                         element.name,
                         elementOrder,
                         element.placeHolder,
-                        element.title,
                         element.rateMax,
                         element.rateMin,
                         element.rateStep,
+                        element.title,
+                        element.type,
                     )),
                     page.name,
                     pageOrder,
@@ -76,7 +76,7 @@ export class SurveyRouter {
                 body.title,
                 body.pages.map((page, pageOrder) => new Page(
                     page.elements.map((element, elementOrder) => new Element(
-                        element.type,
+                        
                         element.choices ? element.choices.map((choice, choiceOrder) => new Choice(
                             choiceOrder,
                             typeof(choice) === 'string' ? choice : choice.text,
@@ -89,10 +89,11 @@ export class SurveyRouter {
                         element.name,
                         elementOrder,
                         element.placeHolder,
-                        element.title,
                         element.rateMax,
                         element.rateMin,
                         element.rateStep,
+                        element.title,
+                        element.type,
                     )),
                     page.name,
                     pageOrder,

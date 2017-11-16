@@ -122,7 +122,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             survey.id,
             survey.title,
             survey.pages.map((page) => new Page(
-                page.elements.map((element) => new Element(element.type,
+                page.elements.map((element) => new Element(
                     element.choices.map((choice) => new Choice(parseInt(choice.order, undefined), choice.text, choice.value)).sort((a: Choice, b: Choice) => a.order - b.order),
                     element.choicesOrder,
                     element.description,
@@ -131,10 +131,11 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     element.name,
                     parseInt(element.order, undefined),
                     element.placeHolder,
-                    element.title,
                     element.rateMax,
                     element.rateMin,
                     element.rateStep,
+                    element.title,
+                    element.type,
                 )).sort((a: Element, b: Element) => a.order - b.order),
                 page.name,
                 parseInt(page.order, undefined),
@@ -168,7 +169,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             survey.id,
             survey.title,
             survey.pages.map((page) => new Page(
-                page.elements.map((element) => new Element(element.type,
+                page.elements.map((element) => new Element(
                     element.choices.map((choice) => new Choice(parseInt(choice.order, undefined), choice.text, choice.value)).sort((a: Choice, b: Choice) => a.order - b.order),
                     element.choicesOrder,
                     element.description,
@@ -177,10 +178,11 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     element.name,
                     parseInt(element.order, undefined),
                     element.placeHolder,
-                    element.title,
                     element.rateMax,
                     element.rateMin,
                     element.rateStep,
+                    element.title,
+                    element.type,
                 )).sort((a: Element, b: Element) => a.order - b.order),
                 page.name,
                 parseInt(page.order, undefined),
