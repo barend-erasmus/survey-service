@@ -15,7 +15,7 @@ export class ResponseRepository extends BaseRepository implements IResponseRepos
         const result: any = await BaseRepository.models.Responses.create({
             answers: response.answers.map((answer) => {
                 return {
-                    elementId: answer.element.id,
+                    elementId: answer.element.identifier,
                     value: answer.value,
                 };
             }),

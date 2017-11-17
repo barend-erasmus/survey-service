@@ -33,6 +33,10 @@ export class UIRouter {
         res.render('survey/edit', {});
     }
 
+    public static async surveyDashboard(req: express.Request, res: express.Response) {
+        res.render('survey/dashboard', {});
+    }
+
     public static async survey(req: express.Request, res: express.Response) {
         res.render('survey', {
             layout: false,

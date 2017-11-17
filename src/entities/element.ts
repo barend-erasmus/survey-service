@@ -5,7 +5,7 @@ export class Element {
         public choices: Choice[],
         public choicesOrder: string,
         public description: string,
-        public id: number,
+        public identifier: number,
         public inputType: string,
         public isRequired: boolean,
         public maxRateDescription: string,

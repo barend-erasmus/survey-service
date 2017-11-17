@@ -34,7 +34,7 @@ export class ElementRepository extends BaseRepository implements IElementReposit
                 ],
             });
 
-        element.id = result.id;
+        element.identifier = result.id;
 
         return element;
     }
@@ -43,7 +43,7 @@ export class ElementRepository extends BaseRepository implements IElementReposit
 
         const result: any = await BaseRepository.models.Elements.find({
             where: {
-                id: element.id,
+                id: element.identifier,
             },
         });
 
@@ -55,14 +55,14 @@ export class ElementRepository extends BaseRepository implements IElementReposit
     public async update(element: Element): Promise<Element> {
         await BaseRepository.models.Choices.destroy({
             where: {
-                elementId: element.id,
+                elementId: element.identifier,
             },
         });
 
         if (element.choices) {
             await BaseRepository.models.Choices.bulkCreate(element.choices.map((choice) => {
                 return {
-                    elementId: element.id,
+                    elementId: element.identifier,
                     order: choice.order,
                     text: choice.text,
                     value: choice.value,
@@ -72,7 +72,7 @@ export class ElementRepository extends BaseRepository implements IElementReposit
 
         const existingElement: any = await BaseRepository.models.Elements.find({
             where: {
-                id: element.id,
+                id: element.identifier,
             },
         });
 

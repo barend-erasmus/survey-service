@@ -26,7 +26,7 @@ export class SurveyRouter {
 
             let survey: Survey = new Survey(
                 body.cookieName,
-                body.id,
+                body.identifier,
                 body.pages.map((page, pageOrder) => new Page(
                     page.elements.map((element, elementOrder) => new Element(
                         element.choices ? element.choices.map((choice, choiceOrder) => new Choice(
@@ -36,7 +36,7 @@ export class SurveyRouter {
                         )) : null,
                         element.choicesOrder,
                         element.description,
-                        element.id,
+                        element.identifier,
                         element.inputType,
                         element.isRequired,
                         element.maxRateDescription,
@@ -50,7 +50,7 @@ export class SurveyRouter {
                         element.title,
                         element.type,
                     )),
-                    page.id,
+                    page.identifier,
                     page.name,
                     pageOrder,
                 )),
@@ -117,7 +117,7 @@ export class SurveyRouter {
 
             let survey: Survey = new Survey(
                 body.cookieName,
-                body.id,
+                body.identifier,
                 body.pages.map((page, pageOrder) => new Page(
                     page.elements.map((element, elementOrder) => new Element(
 
@@ -128,7 +128,7 @@ export class SurveyRouter {
                         )) : null,
                         element.choicesOrder,
                         element.description,
-                        element.id,
+                        element.identifier,
                         element.inputType,
                         element.isRequired,
                         element.maxRateDescription,
@@ -142,7 +142,7 @@ export class SurveyRouter {
                         element.title,
                         element.type,
                     )),
-                    page.id,
+                    page.identifier,
                     page.name,
                     pageOrder,
                 )),

@@ -46,7 +46,7 @@ export class PageRepository extends BaseRepository implements IPageRepository {
                 ],
             });
 
-        page.id = result.id;
+        page.identifier = result.id;
 
         return page;
     }
@@ -54,7 +54,7 @@ export class PageRepository extends BaseRepository implements IPageRepository {
     public async delete(page: Page): Promise<Page> {
         const result: any = await BaseRepository.models.Pages.find({
             where: {
-                id: page.id,
+                id: page.identifier,
             },
         });
 
@@ -66,7 +66,7 @@ export class PageRepository extends BaseRepository implements IPageRepository {
     public async update(page: Page): Promise<Page> {
         const existingPage: any = await BaseRepository.models.Pages.find({
             where: {
-                id: page.id,
+                id: page.identifier,
             },
         });
 

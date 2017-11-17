@@ -58,7 +58,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 ],
             });
 
-        survey.id = result.id;
+        survey.identifier = result.id;
 
         return survey;
     }

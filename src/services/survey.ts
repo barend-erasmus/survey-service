@@ -86,14 +86,14 @@ export class SurveyService {
 
         survey.profileId = profileId;
 
-        const existingSurvey: Survey = await this.surveyRepository.find(survey.id);
+        const existingSurvey: Survey = await this.surveyRepository.find(survey.identifier);
 
         for (const existingPage of existingSurvey.pages) {
-            if (!survey.pages.find((page) => page.id === existingPage.id)) {
+            if (!survey.pages.find((page) => page.identifier === existingPage.identifier)) {
                 await this.pageRepository.delete(existingPage);
             } else {
                 for (const existingElement of existingPage.elements) {
-                    if (!survey.pages.find((page) => page.id === existingPage.id).elements.find((element) => element.id === existingElement.id)) {
+                    if (!survey.pages.find((page) => page.identifier === existingPage.identifier).elements.find((element) => element.identifier === existingElement.identifier)) {
                         await this.elementRepository.delete(existingElement);
                     }
                 }
@@ -101,14 +101,14 @@ export class SurveyService {
         }
 
         for (const page of survey.pages) {
-            if (page.id === null) {
-                await this.pageRepository.create(survey.id, page);
+            if (page.identifier === null) {
+                await this.pageRepository.create(survey.identifier, page);
             } else {
                 await this.pageRepository.update(page);
 
                 for (const element of page.elements) {
-                    if (element.id === null) {
-                        await this.elementRepository.create(page.id, element);
+                    if (element.identifier === null) {
+                        await this.elementRepository.create(page.identifier, element);
                     } else {
                         await this.elementRepository.update(element);
                     }

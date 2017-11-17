@@ -10,7 +10,7 @@ export class SurveyRepository implements ISurveyRepository {
     private surveys: Survey[] = [];
 
     public async create(survey: Survey): Promise<Survey> {
-        survey.id = Math.floor(Math.random() * 1000);
+        survey.identifier = Math.floor(Math.random() * 1000);
 
         this.surveys.push(survey);
 
@@ -22,7 +22,7 @@ export class SurveyRepository implements ISurveyRepository {
     }
 
     public async find(surveyId: number): Promise<Survey> {
-        return this.surveys.find((x) => x.id === surveyId);
+        return this.surveys.find((x) => x.identifier === surveyId);
     }
 
     public async list(profileId: string): Promise<Survey[]> {

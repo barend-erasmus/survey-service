@@ -42,7 +42,7 @@
                             {{#each surveys as |value key|}}
                             <tr>
                                 <td>
-                                    <a target="_blank" href="/ui/survey?surveyId={{value.id}}">
+                                    <a target="_blank" href="/ui/survey?surveyId={{value.identifier}}">
                                         {{value.title}}
                                     </a>
                                 </td>
@@ -50,10 +50,10 @@
                                     {{value.pages.length}}
                                 </td>
                                 <td>
-                                    <a href="/ui/survey?surveyId={{value.id}}" class="btn btn-primary">
+                                    <a href="/ui/survey?surveyId={{value.identifier}}" class="btn btn-primary">
                                         View
                                     </a>
-                                    <a href="/ui/survey/edit?surveyId={{value.id}}" class="btn btn-primary">
+                                    <a href="/ui/survey/edit?surveyId={{value.identifier}}" class="btn btn-primary">
                                         Edit
                                     </a>
                                 </td>

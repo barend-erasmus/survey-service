@@ -129,6 +129,7 @@ app.post('/api/survey/response', SurveyRouter.response);
 app.get('/ui/survey/list', requireUser, UIRouter.surveyList);
 app.get('/ui/survey/create', requireUser, UIRouter.surveyCreate);
 app.get('/ui/survey/edit', requireUser, UIRouter.surveyEdit);
+app.get('/ui/survey/dashboard', requireUser, UIRouter.surveyDashboard);
 
 app.get('/ui/survey', requireUser, UIRouter.survey);
 
