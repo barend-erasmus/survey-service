@@ -16,6 +16,9 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
 
     public async create(survey: Survey): Promise<Survey> {
         const result: any = await BaseRepository.models.Surveys.create({
+            completeText: survey.completeText,
+            cookieName: survey.cookieName,
+            goNextPageAutomatic: survey.goNextPageAutomatic,
             pages: survey.pages.map((page) => {
                 return {
                     elements: page.elements.map((element) => {
@@ -41,6 +44,8 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 };
             }),
             profileId: survey.profileId,
+            showCompletedPage: survey.showCompletedPage,
+            showProgressBar: survey.showProgressBar,
             title: survey.title,
         }, {
                 include: [
@@ -88,7 +93,9 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
         }
 
         return new Survey(
+            survey.completeText,
             survey.cookieName,
+            survey.goNextPageAutomatic,
             survey.id,
             survey.pages.map((page) => new Page(
                 page.elements.map((element) => new Element(
@@ -114,6 +121,8 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 parseInt(page.order, undefined),
             )).sort((a: Page, b: Page) => a.order - b.order),
             survey.profileId,
+            survey.showCompletedPage,
+            survey.showProgressBar,
             survey.title,
         );
     }
@@ -139,7 +148,9 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
         });
 
         return surveys.map((survey) => new Survey(
+            survey.completeText,
             survey.cookieName,
+            survey.goNextPageAutomatic,
             survey.id,
             survey.pages.map((page) => new Page(
                 page.elements.map((element) => new Element(
@@ -165,12 +176,46 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                 parseInt(page.order, undefined),
             )).sort((a: Page, b: Page) => a.order - b.order),
             survey.profileId,
+            survey.showCompletedPage,
+            survey.showProgressBar,
             survey.title,
         ));
     }
 
     public async update(survey: Survey): Promise<Survey> {
-        return null;
+        const existingSurvey: any = await BaseRepository.models.Surveys.find({
+            include: [
+                {
+                    include: [
+                        {
+                            include: [
+                                { model: BaseRepository.models.Choices },
+                            ],
+                            model: BaseRepository.models.Elements,
+                        },
+                    ],
+                    model: BaseRepository.models.Pages,
+                },
+            ],
+            where: {
+                id: survey.identifier,
+            },
+        });
+
+        if (!survey) {
+            return null;
+        }
+
+        existingSurvey.completeText = survey.completeText;
+        existingSurvey.cookieName = survey.cookieName;
+        existingSurvey.goNextPageAutomatic = survey.goNextPageAutomatic;
+        existingSurvey.showCompletedPage = survey.showCompletedPage;
+        existingSurvey.showProgressBar = survey.showProgressBar;
+        existingSurvey.title = survey.title;
+
+        await existingSurvey.save();
+        
+        return survey;
 
     }
 

@@ -13,9 +13,30 @@ export class BaseRepository {
     protected static sequelize: Sequelize.Sequelize = null;
 
     private static defineModels(): void {
+        
         const Surveys = BaseRepository.sequelize.define('surveys', {
+            completeText: {
+                allowNull: true,
+                type: Sequelize.STRING,
+            },
+            cookieName: {
+                allowNull: true,
+                type: Sequelize.STRING,
+            },
+            goNextPageAutomatic: {
+                allowNull: true,
+                type: Sequelize.BOOLEAN,
+            },
             profileId: {
                 allowNull: false,
+                type: Sequelize.STRING,
+            },
+            showCompletedPage: {
+                allowNull: true,
+                type: Sequelize.BOOLEAN,
+            },
+            showProgressBar: {
+                allowNull: true,
                 type: Sequelize.STRING,
             },
             title: {

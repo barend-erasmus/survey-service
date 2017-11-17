@@ -63,6 +63,8 @@ export class SurveyService {
 
             if (typeof (data[key]) === 'string') {
                 response.answers.push(new Answer(element, data[key]));
+            }  else if (typeof (data[key]) === 'boolean') {
+                response.answers.push(new Answer(element, data[key].toString()));
             } else {
                 for (const value of data[key]) {
                     response.answers.push(new Answer(element, value));
@@ -118,6 +120,8 @@ export class SurveyService {
                 }
             }
         }
+
+        await this.surveyRepository.update(survey);
 
         return survey;
     }

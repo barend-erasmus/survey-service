@@ -38,15 +38,15 @@
 </div>
 <script>
 
-    Survey.Survey.cssType = "bootstrap";
-    Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+    Survey.Survey.cssType = 'bootstrap';
+    Survey.defaultBootstrapCss.navigationButton = 'btn btn-green';
 
-    Survey.JsonObject.metaData.addProperty("survey", { name: "identifier:number", default: null });
-    Survey.JsonObject.metaData.addProperty("page", { name: "identifier:number", default: null });
-    Survey.JsonObject.metaData.addProperty("questionbase", { name: "identifier:number", default: null });
+    Survey.JsonObject.metaData.addProperty('survey', { name: 'identifier:number', default: null });
+    Survey.JsonObject.metaData.addProperty('page', { name: 'identifier:number', default: null });
+    Survey.JsonObject.metaData.addProperty('questionbase', { name: 'identifier:number', default: null });
 
-    var editorOptions = {};
-    var editor = new SurveyEditor.SurveyEditor("editorElement", editorOptions);
+    var editorOptions = { questionTypes: ['boolean', 'checkbox', 'comment', 'dropdown', 'radiogroup', 'rating', 'text'] };
+    var editor = new SurveyEditor.SurveyEditor('editorElement', editorOptions);
 
 
     editor.saveSurveyFunc = function () {
@@ -88,7 +88,7 @@
     function parseQueryString(url) {
         var urlParams = {};
         url.replace(
-            new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+            new RegExp('([^?=&]+)(=([^&]*))?', 'g'),
             function ($0, $1, $2, $3) {
                 urlParams[$1] = $3;
             }

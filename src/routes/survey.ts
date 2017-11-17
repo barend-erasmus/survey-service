@@ -27,7 +27,9 @@ export class SurveyRouter {
             const body: Survey = req.body;
 
             let survey: Survey = new Survey(
+                body.completeText,
                 body.cookieName,
+                body.goNextPageAutomatic,
                 body.identifier,
                 body.pages.map((page, pageOrder) => new Page(
                     page.elements.map((element, elementOrder) => new Element(
@@ -57,6 +59,8 @@ export class SurveyRouter {
                     pageOrder,
                 )),
                 null,
+                body.showCompletedPage,
+                body.showProgressBar,
                 body.title,
             );
 
@@ -148,7 +152,9 @@ export class SurveyRouter {
             const body: Survey = req.body;
 
             let survey: Survey = new Survey(
+                body.completeText,
                 body.cookieName,
+                body.goNextPageAutomatic,
                 body.identifier,
                 body.pages.map((page, pageOrder) => new Page(
                     page.elements.map((element, elementOrder) => new Element(
@@ -179,6 +185,8 @@ export class SurveyRouter {
                     pageOrder,
                 )),
                 null,
+                body.showCompletedPage,
+                body.showProgressBar,
                 body.title,
             );
 
