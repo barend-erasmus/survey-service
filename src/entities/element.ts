@@ -8,6 +8,8 @@ export class Element {
         public id: number,
         public inputType: string,
         public isRequired: boolean,
+        public maxRateDescription: string,
+        public minRateDescription: string,
         public name: string,
         public order: number,
         public placeHolder: string,

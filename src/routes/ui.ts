@@ -5,6 +5,7 @@ import { config } from './../config';
 // Imports repositories
 import { ElementRepository } from './../repositories/sequelize/element';
 import { PageRepository } from './../repositories/sequelize/page';
+import { ResponseRepository } from './../repositories/sequelize/response';
 import { SurveyRepository } from './../repositories/sequelize/survey';
 
 // Imports services
@@ -42,9 +43,10 @@ export class UIRouter {
 
         const elementRepository: ElementRepository = new ElementRepository(config.database.host, config.database.username, config.database.password);
         const pageyRepository: PageRepository = new PageRepository(config.database.host, config.database.username, config.database.password);
+        const responseRepository: ResponseRepository = new ResponseRepository(config.database.host, config.database.username, config.database.password);
         const surveyRepository: SurveyRepository = new SurveyRepository(config.database.host, config.database.username, config.database.password);
 
-        const surveyService: SurveyService = new SurveyService(elementRepository, pageyRepository, surveyRepository);
+        const surveyService: SurveyService = new SurveyService(elementRepository, pageyRepository, responseRepository, surveyRepository);
 
         return surveyService;
     }

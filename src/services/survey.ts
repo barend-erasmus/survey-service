@@ -4,11 +4,14 @@ import { config } from './../config';
 // Imports repositories
 import { IElementRepository } from './../repositories/element';
 import { IPageRepository } from './../repositories/page';
+import { IResponseRepository } from './../repositories/response';
 import { ISurveyRepository } from './../repositories/survey';
 
 // Imports models
+import { Answer } from '../entities/answer';
 import { Element } from './../entities/element';
 import { Page } from './../entities/page';
+import { Response } from './../entities/response';
 import { Survey } from './../entities/survey';
 
 export class SurveyService {
@@ -16,6 +19,7 @@ export class SurveyService {
     constructor(
         private elementRepository: IElementRepository,
         private pageRepository: IPageRepository,
+        private responseRepository: IResponseRepository,
         private surveyRepository: ISurveyRepository,
     ) {
 
@@ -45,6 +49,34 @@ export class SurveyService {
 
     public async list(profileId: string): Promise<Survey[]> {
         return this.surveyRepository.list(profileId);
+    }
+
+    public async response(surveyId: number, profileId: string, data: {}): Promise<Response> {
+
+        const survey: Survey = await this.surveyRepository.find(surveyId);
+
+        const elements: Element[] = [].concat.apply([], survey.pages.map((page) => {
+            return page.elements;
+        }));
+
+        const response: Response = new Response([], profileId);
+
+        for (const key of Object.keys(data)) {
+
+            const element: Element = elements.find((x) => x.name === key);
+
+            if (typeof (data[key]) === 'string') {
+                response.answers.push(new Answer(element, data[key]));
+            } else {
+                for (const value of data[key]) {
+                    response.answers.push(new Answer(element, value));
+                }
+            }
+        }
+
+        await this.responseRepository.create(surveyId, response);
+
+        return response;
     }
 
     public async update(

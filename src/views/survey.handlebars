@@ -40,7 +40,23 @@
                 survey = new Survey.Model(data);
 
                 survey.onComplete.add(function (result) {
-                    console.log(result.data);
+                    $.ajax({
+                        type: 'POST',
+                        url: `/api/survey/response`,
+                        data: JSON.stringify({
+                            data: result.data,
+                            profileId: 'profile-id',
+                            surveyId: parseQueryString(location.search).surveyId,
+                        }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+                            
+                        },
+                        failure: function (err) {
+                            alert(err);
+                        }
+                    });
                 });
 
                 $("#surveyElement").Survey({

@@ -5,6 +5,7 @@ import { config } from './../config';
 // Imports repositories
 import { ElementRepository } from './../repositories/sequelize/element';
 import { PageRepository } from './../repositories/sequelize/page';
+import { ResponseRepository } from './../repositories/sequelize/response';
 import { SurveyRepository } from './../repositories/sequelize/survey';
 
 // Imports services
@@ -38,6 +39,8 @@ export class SurveyRouter {
                         element.id,
                         element.inputType,
                         element.isRequired,
+                        element.maxRateDescription,
+                        element.minRateDescription,
                         element.name,
                         elementOrder,
                         element.placeHolder,
@@ -96,47 +99,9 @@ export class SurveyRouter {
     public static async response(req: express.Request, res: express.Response) {
         try {
 
-            const body: Survey = req.body;
+            await SurveyRouter.getSurveyService().response(req.body.surveyId, req.body.profileId, req.body.data);
 
-            let survey: Survey = new Survey(
-                body.cookieName,
-                body.id,
-                body.pages.map((page, pageOrder) => new Page(
-                    page.elements.map((element, elementOrder) => new Element(
-
-                        element.choices ? element.choices.map((choice, choiceOrder) => new Choice(
-                            choiceOrder,
-                            typeof (choice) === 'string' ? choice : choice.text,
-                            typeof (choice) === 'string' ? choice : choice.value,
-                        )) : null,
-                        element.choicesOrder,
-                        element.description,
-                        element.id,
-                        element.inputType,
-                        element.isRequired,
-                        element.name,
-                        elementOrder,
-                        element.placeHolder,
-                        element.rateMax,
-                        element.rateMin,
-                        element.rateStep,
-                        element.title,
-                        element.type,
-                    )),
-                    page.id,
-                    page.name,
-                    pageOrder,
-                )),
-                null,
-                body.title,
-            );
-
-            survey = await SurveyRouter.getSurveyService().update(
-                req.user.id,
-                survey,
-            );
-
-            res.json(survey);
+            res.json(true);
         } catch (err) {
             res.status(500).json({
                 message: err.message,
@@ -166,6 +131,8 @@ export class SurveyRouter {
                         element.id,
                         element.inputType,
                         element.isRequired,
+                        element.maxRateDescription,
+                        element.minRateDescription,
                         element.name,
                         elementOrder,
                         element.placeHolder,
@@ -201,9 +168,10 @@ export class SurveyRouter {
 
         const elementRepository: ElementRepository = new ElementRepository(config.database.host, config.database.username, config.database.password);
         const pageyRepository: PageRepository = new PageRepository(config.database.host, config.database.username, config.database.password);
+        const responseRepository: ResponseRepository = new ResponseRepository(config.database.host, config.database.username, config.database.password);
         const surveyRepository: SurveyRepository = new SurveyRepository(config.database.host, config.database.username, config.database.password);
 
-        const surveyService: SurveyService = new SurveyService(elementRepository, pageyRepository, surveyRepository);
+        const surveyService: SurveyService = new SurveyService(elementRepository, pageyRepository, responseRepository, surveyRepository);
 
         return surveyService;
     }

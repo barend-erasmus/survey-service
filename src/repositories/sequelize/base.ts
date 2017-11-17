@@ -36,9 +36,21 @@ export class BaseRepository {
         });
 
         const Elements = BaseRepository.sequelize.define('elements', {
+            choicesOrder: {
+                allowNull: true,
+                type: Sequelize.STRING,
+            },
             description: {
                 allowNull: true,
                 type: Sequelize.STRING,
+            },
+            inputType: {
+                allowNull: true,
+                type: Sequelize.STRING,
+            },
+            isRequired: {
+                allowNull: true,
+                type: Sequelize.BOOLEAN,
             },
             maxRateDescription: {
                 allowNull: true,
@@ -54,6 +66,22 @@ export class BaseRepository {
             },
             order: {
                 allowNull: false,
+                type: Sequelize.NUMERIC,
+            },
+            placeHolder: {
+                allowNull: true,
+                type: Sequelize.STRING,
+            },
+            rateMax: {
+                allowNull: true,
+                type: Sequelize.NUMERIC,
+            },
+            rateMin: {
+                allowNull: true,
+                type: Sequelize.NUMERIC,
+            },
+            rateStep: {
+                allowNull: true,
                 type: Sequelize.NUMERIC,
             },
             title: {

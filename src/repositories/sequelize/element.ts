@@ -59,6 +59,17 @@ export class ElementRepository extends BaseRepository implements IElementReposit
             },
         });
 
+        if (element.choices) {
+            await BaseRepository.models.Choices.bulkCreate(element.choices.map((choice) => {
+                return {
+                    elementId: element.id,
+                    order: choice.order,
+                    text: choice.text,
+                    value: choice.value,
+                };
+            }));
+        }
+
         const existingElement: any = await BaseRepository.models.Elements.find({
             where: {
                 id: element.id,
