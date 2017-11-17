@@ -37,6 +37,10 @@ export class UIRouter {
         res.render('survey/dashboard', {});
     }
 
+    public static async surveyResults(req: express.Request, res: express.Response) {
+        res.render('survey/results', {});
+    }
+
     public static async survey(req: express.Request, res: express.Response) {
         res.render('survey', {
             layout: false,

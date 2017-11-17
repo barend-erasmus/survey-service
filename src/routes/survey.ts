@@ -9,6 +9,7 @@ import { ResponseRepository } from './../repositories/sequelize/response';
 import { SurveyRepository } from './../repositories/sequelize/survey';
 
 // Imports services
+import { StatisticsService } from './../services/statistics';
 import { SurveyService } from './../services/survey';
 
 // Imports models
@@ -16,6 +17,7 @@ import { Choice } from '../entities/choice';
 import { Element } from '../entities/element';
 import { Page } from '../entities/page';
 import { Survey } from './../entities/survey';
+import { Response } from './../entities/response';
 
 export class SurveyRouter {
 
@@ -99,9 +101,39 @@ export class SurveyRouter {
     public static async response(req: express.Request, res: express.Response) {
         try {
 
-            await SurveyRouter.getSurveyService().response(req.body.surveyId, req.body.profileId, req.body.data);
+            await SurveyRouter.getSurveyService().response(req.body.surveyId, req.user.id, req.body.data);
 
             res.json(true);
+        } catch (err) {
+            res.status(500).json({
+                message: err.message,
+                stack: err.stack,
+            });
+        }
+    }
+
+    public static async responses(req: express.Request, res: express.Response) {
+        try {
+
+            const responses: Response[] = await SurveyRouter.getSurveyService().responses(req.query.surveyId);
+
+            res.json(responses);
+        } catch (err) {
+            res.status(500).json({
+                message: err.message,
+                stack: err.stack,
+            });
+        }
+    }
+
+    public static async statistics(req: express.Request, res: express.Response) {
+        try {
+
+            const responses: Response[] = await SurveyRouter.getSurveyService().responses(req.query.surveyId);
+
+            const statistics: any[] = await SurveyRouter.getStatisticsService().buildChartsForResponses(responses);
+
+            res.json(statistics);
         } catch (err) {
             res.status(500).json({
                 message: err.message,
@@ -162,6 +194,13 @@ export class SurveyRouter {
                 stack: err.stack,
             });
         }
+    }
+
+    protected static getStatisticsService(): StatisticsService {
+
+        const statisticsService: StatisticsService = new StatisticsService();
+
+        return statisticsService;
     }
 
     protected static getSurveyService(): SurveyService {

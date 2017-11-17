@@ -125,11 +125,14 @@ app.post('/api/survey/update', requireUser, SurveyRouter.update);
 app.get('/api/survey/list', requireUser, SurveyRouter.list);
 app.get('/api/survey/find', requireUser, SurveyRouter.find);
 app.post('/api/survey/response', SurveyRouter.response);
+app.get('/api/survey/responses', requireUser, SurveyRouter.responses);
+app.get('/api/survey/statistics', requireUser, SurveyRouter.statistics);
 
 app.get('/ui/survey/list', requireUser, UIRouter.surveyList);
 app.get('/ui/survey/create', requireUser, UIRouter.surveyCreate);
 app.get('/ui/survey/edit', requireUser, UIRouter.surveyEdit);
 app.get('/ui/survey/dashboard', requireUser, UIRouter.surveyDashboard);
+app.get('/ui/survey/results', requireUser, UIRouter.surveyResults);
 
 app.get('/ui/survey', requireUser, UIRouter.survey);
 

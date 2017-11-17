@@ -40,10 +40,6 @@ export class SurveyService {
     public async find(profileId: string, surveyId: number): Promise<Survey> {
         const survey: Survey = await this.surveyRepository.find(surveyId);
 
-        if (survey.profileId !== profileId) {
-            throw new Error('Invalid Profile Id');
-        }
-
         return survey;
     }
 
@@ -77,6 +73,13 @@ export class SurveyService {
         await this.responseRepository.create(surveyId, response);
 
         return response;
+    }
+
+    public async responses(surveyId: number): Promise<Response[]> {
+
+        const responses: Response[] = await this.responseRepository.list(surveyId);
+
+        return responses;
     }
 
     public async update(

@@ -2,7 +2,7 @@
     <div class="col-lg-10">
         <h2>Survey Results</h2>
         <ol class="breadcrumb">
-           <li>
+            <li>
                 <a href="/ui/survey/dashboard">Home</a>
             </li>
             <li>
@@ -36,167 +36,49 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script>
 
-    var survey;
+    var charts;
 
     $(document).ready(function () {
 
         $.ajax({
             type: 'GET',
-            url: `/api/survey/find?surveyId=${getParameterByName('surveyId')}`,
+            url: `/api/survey/statistics?surveyId=${parseQueryString(location.search).surveyId}`,
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
-            success: function (responseSurvey) {
-                survey = responseSurvey;
+            success: function (data) {
 
-                for (var question of survey.questions) {
-                    $('.ibox-content').append(`<div id="chart-${question.id}"></div>`);
+                charts = data;
 
-                    if (question.type === 'multiple-choice') {
-                        $.ajax({
-                            type: 'GET',
-                            url: `/api/survey/answer/list?surveyId=${survey.id}&questionId=${question.id}`,
-                            contentType: 'application/json; charset=utf-8',
-                            dataType: 'json',
-                            success: function (response) {
-                                initializeMutlipleChoiceChart(response);
-                            },
-                            failure: function (err) {
-                                alert(err);
-                            }
-                        });
-                    } else if (question.type === 'checkbox') {
-                        $.ajax({
-                            type: 'GET',
-                            url: `/api/survey/answer/list?surveyId=${survey.id}&questionId=${question.id}`,
-                            contentType: 'application/json; charset=utf-8',
-                            dataType: 'json',
-                            success: function (response) {
-                                initializeCheckboxChart(response);
-                            },
-                            failure: function (err) {
-                                alert(err);
-                            }
-                        });
-                    }
+                for (var i = 0; i < charts.length; i ++) {
+                    var chart = charts[i];
+                    $('.ibox-content').append(`<div class="chart" id="chart-${i}" data-index="${i}"></div>`);
+
+                    $(`#chart-${i}`).highcharts(chart);
+
                 }
             },
             failure: function (err) {
                 alert(err);
             }
         });
-
-
     });
 
-    function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-    }
-
-    function initializeMutlipleChoiceChart(response) {
-        var labels = [].concat.apply([], response.answers.map((x) => x.textValues));
-        labels = labels.filter(onlyUnique);
-
-        var data = [];
-
-        for (var label of labels) {
-            data.push({
-                name: label,
-                y: response.answers.filter((x) => x.textValues.indexOf(label)).length
-            });
-        }
-
-        var json = {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: survey.questions.find((x) => x.id === response.questionId).text
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                        }
-                    }
-                }
-            },
-            series: [{
-                name: '# of respondents',
-                colorByPoint: true,
-                data: data,
-            }]
+    function guidGenerator() {
+        var S4 = function () {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         };
-
-        $(`#chart-${response.questionId}`).highcharts(json);
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
 
-    function initializeCheckboxChart(response) {
-        var labels = [].concat.apply([], response.answers.map((x) => x.textValues));
-        labels = labels.filter(onlyUnique);
+    function parseQueryString(url) {
+        var urlParams = {};
+        url.replace(
+            new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+            function ($0, $1, $2, $3) {
+                urlParams[$1] = $3;
+            }
+        );
 
-        var data = [];
-
-        for (var label of labels) {
-            data.push({
-                name: label,
-                y: response.answers.filter((x) => x.textValues.indexOf(label)).length
-            });
-        }
-
-        var json = {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: survey.questions.find((x) => x.id === response.questionId).text
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                        }
-                    }
-                }
-            },
-            series: [{
-                name: '# of respondents',
-                colorByPoint: true,
-                data: data,
-            }]
-        };
-
-        $(`#chart-${response.questionId}`).highcharts(json);
-    }
-
-    function getParameterByName(name) {
-        var url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
+        return urlParams;
     }
 </script>

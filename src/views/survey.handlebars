@@ -45,7 +45,6 @@
                         url: `/api/survey/response`,
                         data: JSON.stringify({
                             data: result.data,
-                            profileId: 'profile-id',
                             surveyId: parseQueryString(location.search).surveyId,
                         }),
                         contentType: 'application/json; charset=utf-8',
