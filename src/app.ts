@@ -50,7 +50,7 @@ passport.deserializeUser((id: string, done: (err: Error, obj: any) => void) => {
 app.use(passport.session());
 
 passport.use(new GoogleStrategy({
-    callbackURL: argv.prod ? `https://survey-service.openservices.co.za/ui/callback` : 'http://localhost:3000/ui/callback',
+    callbackURL: argv.prod ? `https://survey.openservices.co.za/ui/callback` : 'http://localhost:3000/ui/callback',
     clientID: '747263281118-a6dpgtqjhscgapi88o7jqsv1ol1r67qv.apps.googleusercontent.com',
     clientSecret: 'TTOZj8hjYF4r6t0qua5Oz6Vm',
 }, async (accessToken: string, refreshToken: string, profile: any, done: (err: Error, obj: any) => void) => {
