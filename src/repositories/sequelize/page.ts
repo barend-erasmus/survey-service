@@ -33,7 +33,7 @@ export class PageRepository extends BaseRepository implements IPageRepository {
             }),
             name: page.name,
             order: page.order,
-            surveyId: surveyId,
+            surveyId,
         }, {
 
                 include: [
@@ -55,7 +55,7 @@ export class PageRepository extends BaseRepository implements IPageRepository {
         const result: any = await BaseRepository.models.Pages.find({
             where: {
                 id: page.id,
-            }
+            },
         });
 
         await result.destroy();

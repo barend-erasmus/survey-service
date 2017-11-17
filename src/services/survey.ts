@@ -2,9 +2,9 @@
 import { config } from './../config';
 
 // Imports repositories
-import { ISurveyRepository } from './../repositories/survey';
-import { IPageRepository } from './../repositories/page';
 import { IElementRepository } from './../repositories/element';
+import { IPageRepository } from './../repositories/page';
+import { ISurveyRepository } from './../repositories/survey';
 
 // Imports models
 import { Element } from './../entities/element';

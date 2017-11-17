@@ -25,7 +25,7 @@ export class ElementRepository extends BaseRepository implements IElementReposit
             minRateDescription: null,
             name: element.name,
             order: element.order,
-            pageId: pageId,
+            pageId,
             title: element.title,
             type: element.type,
         }, {
@@ -44,7 +44,7 @@ export class ElementRepository extends BaseRepository implements IElementReposit
         const result: any = await BaseRepository.models.Elements.find({
             where: {
                 id: element.id,
-            }
+            },
         });
 
         await result.destroy();
@@ -56,7 +56,7 @@ export class ElementRepository extends BaseRepository implements IElementReposit
         await BaseRepository.models.Choices.destroy({
             where: {
                 elementId: element.id,
-            }
+            },
         });
 
         const existingElement: any = await BaseRepository.models.Elements.find({

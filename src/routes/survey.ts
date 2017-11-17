@@ -203,7 +203,7 @@ export class SurveyRouter {
         const pageyRepository: PageRepository = new PageRepository(config.database.host, config.database.username, config.database.password);
         const surveyRepository: SurveyRepository = new SurveyRepository(config.database.host, config.database.username, config.database.password);
 
-        const surveyService: SurveyService = new SurveyService(elementRepository, pageyRepository,surveyRepository);
+        const surveyService: SurveyService = new SurveyService(elementRepository, pageyRepository, surveyRepository);
 
         return surveyService;
     }
