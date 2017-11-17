@@ -1,10 +1,7 @@
 // Imports
 import * as Sequelize from 'sequelize';
-import { Survey } from '../../entities/survey';
-import { Element } from '../../entities/element';
 
 export class BaseRepository {
-    protected static sequelize: Sequelize.Sequelize = null;
     protected static models: {
         Answers: Sequelize.Model<{}, {}>,
         Choices: Sequelize.Model<{}, {}>,
@@ -13,6 +10,7 @@ export class BaseRepository {
         Responses: Sequelize.Model<{}, {}>,
         Surveys: Sequelize.Model<{}, {}>,
     } = null;
+    protected static sequelize: Sequelize.Sequelize = null;
 
     private static defineModels(): void {
         const Surveys = BaseRepository.sequelize.define('surveys', {
@@ -143,15 +141,15 @@ export class BaseRepository {
         }
     }
 
+    public close(): void {
+        BaseRepository.sequelize.close();
+    }
+
     public sync(): Promise<void> {
         return new Promise((resolve, reject) => {
             BaseRepository.sequelize.sync({ force: true }).then(() => {
                 resolve();
             });
         });
-    }
-
-    public close(): void {
-        BaseRepository.sequelize.close();
     }
 }

@@ -63,36 +63,6 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
         return survey;
     }
 
-    public async update(survey: Survey): Promise<Survey> {
-        const existingSurvey: any = await BaseRepository.models.Surveys.find({
-            include: [
-                {
-                    include: [
-                        {
-                            include: [
-                                { model: BaseRepository.models.Choices },
-                            ],
-                            model: BaseRepository.models.Elements,
-                        },
-                    ],
-                    model: BaseRepository.models.Pages,
-                },
-            ],
-            where: {
-                id: survey.id,
-            },
-        });
-
-        if (!existingSurvey) {
-            return null;
-        }
-
-        await existingSurvey.destroy();
-
-        return this.create(survey);
-
-    }
-
     public async find(surveyId: number): Promise<Survey> {
         const survey: any = await BaseRepository.models.Surveys.find({
             include: [
@@ -125,6 +95,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     element.choices.map((choice) => new Choice(parseInt(choice.order, undefined), choice.text, choice.value)).sort((a: Choice, b: Choice) => a.order - b.order),
                     element.choicesOrder,
                     element.description,
+                    element.id,
                     element.inputType,
                     element.isRequired,
                     element.name,
@@ -136,6 +107,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     element.title,
                     element.type,
                 )).sort((a: Element, b: Element) => a.order - b.order),
+                page.id,
                 page.name,
                 parseInt(page.order, undefined),
             )).sort((a: Page, b: Page) => a.order - b.order),
@@ -172,6 +144,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     element.choices.map((choice) => new Choice(parseInt(choice.order, undefined), choice.text, choice.value)).sort((a: Choice, b: Choice) => a.order - b.order),
                     element.choicesOrder,
                     element.description,
+                    element.id,
                     element.inputType,
                     element.isRequired,
                     element.name,
@@ -183,6 +156,7 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
                     element.title,
                     element.type,
                 )).sort((a: Element, b: Element) => a.order - b.order),
+                page.id,
                 page.name,
                 parseInt(page.order, undefined),
             )).sort((a: Page, b: Page) => a.order - b.order),
@@ -190,4 +164,23 @@ export class SurveyRepository extends BaseRepository implements ISurveyRepositor
             survey.title,
         ));
     }
+
+    public async update(survey: Survey): Promise<Survey> {
+        return null;
+
+    }
+
+    // public async saveResponse(response: Response): Promise<Response> {
+    //     const result: any = await BaseRepository.models.Responses.create({
+    //         profileId: response.profileId,
+    //         answers: response.answers.map((answer) => {
+    //             return {
+    //                 elementId: answer.element.id,
+    //                 value: answer.value,
+    //             };
+    //         })
+    //     });
+
+    //     return response;
+    // }
 }

@@ -3,6 +3,8 @@ import * as express from 'express';
 import { config } from './../config';
 
 // Imports repositories
+import { ElementRepository } from './../repositories/sequelize/element';
+import { PageRepository } from './../repositories/sequelize/page';
 import { SurveyRepository } from './../repositories/sequelize/survey';
 
 // Imports services
@@ -38,9 +40,11 @@ export class UIRouter {
 
     protected static getSurveyService(): SurveyService {
 
+        const elementRepository: ElementRepository = new ElementRepository(config.database.host, config.database.username, config.database.password);
+        const pageyRepository: PageRepository = new PageRepository(config.database.host, config.database.username, config.database.password);
         const surveyRepository: SurveyRepository = new SurveyRepository(config.database.host, config.database.username, config.database.password);
 
-        const surveyService: SurveyService = new SurveyService(surveyRepository);
+        const surveyService: SurveyService = new SurveyService(elementRepository, pageyRepository,surveyRepository);
 
         return surveyService;
     }

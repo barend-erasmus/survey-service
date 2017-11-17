@@ -41,6 +41,10 @@
     Survey.Survey.cssType = "bootstrap";
     Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
 
+    Survey.JsonObject.metaData.addProperty("survey", { name: "id:number", default: null });
+    Survey.JsonObject.metaData.addProperty("page", { name: "id:number", default: null });
+    Survey.JsonObject.metaData.addProperty("questionbase", { name: "id:number", default: null });
+
     var editorOptions = {};
     var editor = new SurveyEditor.SurveyEditor("editorElement", editorOptions);
 
