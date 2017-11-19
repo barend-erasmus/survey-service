@@ -37,8 +37,12 @@ export class SurveyService {
         return survey;
     }
 
-    public async find(profileId: string, surveyId: number): Promise<Survey> {
+    public async find(profileId: string, surveyId: number, validateProfileId: boolean): Promise<Survey> {
         const survey: Survey = await this.surveyRepository.find(surveyId);
+
+        if (validateProfileId && survey.profileId !== profileId) {
+            return null;
+        }
 
         return survey;
     }

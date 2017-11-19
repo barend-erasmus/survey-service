@@ -23,7 +23,7 @@ export class StatisticsService {
         const result: any[] = [];
 
         const counts: {} = {};
-        const elements: Element[] = [];
+        let elements: Element[] = [];
 
         for (const response of responses) {
             for (const answer of response.answers) {
@@ -41,8 +41,19 @@ export class StatisticsService {
             }
         }
 
+        elements = elements.sort((a: Element, b: Element) => a.order - b.order);
 
         for (const element of elements) {
+
+            if (
+                element.type !== 'boolean' && 
+                element.type !== 'checkbox' && 
+                element.type !== 'dropdown' && 
+                element.type !== 'radiogroup' && 
+                element.type !== 'rating') {
+                    continue;
+                }
+
             result.push({
                 chart: {
                     plotBackgroundColor: null,

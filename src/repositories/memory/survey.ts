@@ -22,7 +22,9 @@ export class SurveyRepository implements ISurveyRepository {
     }
 
     public async find(surveyId: number): Promise<Survey> {
-        return this.surveys.find((x) => x.identifier === surveyId);
+        const survey: Survey = this.surveys.find((x) => x.identifier === surveyId);
+
+        return survey? survey : null;
     }
 
     public async list(profileId: string): Promise<Survey[]> {
