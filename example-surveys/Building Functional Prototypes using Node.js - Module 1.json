@@ -1,0 +1,289 @@
+{
+    "identifier": 2,
+    "pages": [
+     {
+      "name": "page1",
+      "elements": [
+       {
+        "type": "radiogroup",
+        "name": "question1",
+        "identifier": 8,
+        "title": "The back-end of a web app is commonly referred to as the _-side component.",
+        "choices": [
+         {
+          "value": "Client",
+          "text": "Client",
+          "order": 0
+         },
+         {
+          "value": "Back",
+          "text": "Back",
+          "order": 1
+         },
+         {
+          "value": "Server",
+          "text": "Server",
+          "order": 2
+         },
+         {
+          "value": "App",
+          "text": "App",
+          "order": 3
+         }
+        ]
+       },
+       {
+        "type": "checkbox",
+        "name": "question2",
+        "identifier": 9,
+        "title": "Select all responsibilities of the back-end of a web app:",
+        "choices": [
+         {
+          "value": "Send HTTP Request messages",
+          "text": "Facilitate user interaction with user interface",
+          "order": 0
+         },
+         {
+          "value": "Send HTTP Request messages",
+          "text": "Send HTTP Request messages",
+          "order": 1
+         },
+         {
+          "value": "Listen for HTTP Requests for data or relevant actions",
+          "text": "Listen for HTTP Requests for data or relevant actions",
+          "order": 2
+         },
+         {
+          "value": "Respond to client using HTTP Response messages to provide data and/or status updates",
+          "text": "Respond to client using HTTP Response messages to provide data and/or status updates",
+          "order": 3
+         }
+        ]
+       },
+       {
+        "type": "checkbox",
+        "name": "question3",
+        "identifier": 10,
+        "title": "Select the common layers of a web application:",
+        "choices": [
+         {
+          "value": "Presentation layer",
+          "text": "Presentation layer",
+          "order": 0
+         },
+         {
+          "value": "Application layer",
+          "text": "Application layer",
+          "order": 1
+         },
+         {
+          "value": "Logic layer",
+          "text": "Logic layer",
+          "order": 2
+         },
+         {
+          "value": "Data layer",
+          "text": "Data layer",
+          "order": 3
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question4",
+        "identifier": 11,
+        "title": "A(n) _ defines a set of endpoints that allows one system to access the functionality of another.",
+        "choices": [
+         {
+          "value": "GPU",
+          "text": "GPU",
+          "order": 0
+         },
+         {
+          "value": "TCP",
+          "text": "TCP",
+          "order": 1
+         },
+         {
+          "value": "HTPI",
+          "text": "HTPI",
+          "order": 2
+         },
+         {
+          "value": "HTTP",
+          "text": "HTTP",
+          "order": 3
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question5",
+        "identifier": 12,
+        "title": "_ defines a set of rules for how clients and servers communicate on the Web.",
+        "choices": [
+         {
+          "value": "HTML",
+          "text": "HTML",
+          "order": 0
+         },
+         {
+          "value": "Data Transfer Protocol",
+          "text": "Data Transfer Protocol",
+          "order": 1
+         },
+         {
+          "value": "IP",
+          "text": "IP",
+          "order": 2
+         },
+         {
+          "value": "HTTP",
+          "text": "HTTP",
+          "order": 3
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question6",
+        "identifier": 13,
+        "title": "A RESTful Web API revolves around __ and _.",
+        "choices": [
+         {
+          "value": "GET methods; POST methods",
+          "order": 0
+         },
+         {
+          "value": "requests; updates",
+          "order": 1
+         },
+         {
+          "value": "resources; actions correct",
+          "text": "resources; actions",
+          "order": 2
+         },
+         {
+          "value": "action; rest",
+          "order": 3
+         }
+        ]
+       },
+       {
+        "type": "checkbox",
+        "name": "question7",
+        "identifier": 14,
+        "title": "Select the types of HTTP messages that clients and servers can use to communicate with one another:",
+        "choices": [
+         {
+          "value": "HTTP status messages",
+          "text": "HTTP status messages",
+          "order": 0
+         },
+         {
+          "value": "HTTP request messages",
+          "text": "HTTP request messages",
+          "order": 1
+         },
+         {
+          "value": "HTTP update messages",
+          "text": "HTTP update messages",
+          "order": 2
+         },
+         {
+          "value": "HTTP response messages",
+          "text": "HTTP response messages",
+          "order": 3
+         }
+        ]
+       },
+       {
+        "type": "checkbox",
+        "name": "question8",
+        "identifier": 15,
+        "title": "Select all HTTP request method types:",
+        "choices": [
+         {
+          "value": "PULL",
+          "text": "PULL",
+          "order": 0
+         },
+         {
+          "value": "PUT",
+          "text": "PUT",
+          "order": 1
+         },
+         {
+          "value": "POST",
+          "text": "POST",
+          "order": 2
+         },
+         {
+          "value": "DELETE",
+          "text": "DELETE",
+          "order": 3
+         }
+        ]
+       },
+       {
+        "type": "radiogroup",
+        "name": "question9",
+        "identifier": 16,
+        "title": "Select the HTTP request method type that corresponds to the read CRUD operation:",
+        "choices": [
+         {
+          "value": "VIEW",
+          "text": "VIEW",
+          "order": 0
+         },
+         {
+          "value": "GET",
+          "text": "GET",
+          "order": 1
+         },
+         {
+          "value": "READ",
+          "text": "READ",
+          "order": 2
+         },
+         {
+          "value": "PULL",
+          "text": "PULL",
+          "order": 3
+         }
+        ]
+       },
+       {
+        "type": "checkbox",
+        "name": "question10",
+        "identifier": 17,
+        "title": "Which of the following are components of an HTTP response message sent by a server:",
+        "choices": [
+         {
+          "value": "Request method type",
+          "text": "Request method type",
+          "order": 0
+         },
+         {
+          "value": "Status code",
+          "text": "Status code",
+          "order": 1
+         },
+         {
+          "value": "Response method type",
+          "text": "Response method type",
+          "order": 2
+         },
+         {
+          "value": "Optional body",
+          "text": "Optional body",
+          "order": 3
+         }
+        ]
+       }
+      ],
+      "identifier": 2
+     }
+    ],
+    "title": "Building Functional Prototypes using Node.js - Module 1"
+   }
