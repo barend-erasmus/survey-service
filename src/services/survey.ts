@@ -110,13 +110,13 @@ export class SurveyService {
         }
 
         for (const page of survey.pages) {
-            if (page.identifier === null) {
+            if (!page.identifier) {
                 await this.pageRepository.create(survey.identifier, page);
             } else {
                 await this.pageRepository.update(page);
 
                 for (const element of page.elements) {
-                    if (element.identifier === null) {
+                    if (!element.identifier) {
                         await this.elementRepository.create(page.identifier, element);
                     } else {
                         await this.elementRepository.update(element);
