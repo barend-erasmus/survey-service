@@ -80,7 +80,7 @@ export class SurveyRouter {
 
     public static async find(req: express.Request, res: express.Response) {
         try {
-            const survey = await SurveyRouter.getSurveyService().find(req.user.id, req.query.surveyId);
+            const survey = await SurveyRouter.getSurveyService().find(req.user.id, req.query.surveyId, false);
             res.json(survey);
         } catch (err) {
             res.status(500).json({
